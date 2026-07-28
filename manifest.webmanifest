@@ -1,0 +1,43 @@
+{
+  "id": "./",
+  "name": "SEATEK Holding S.A.C. – ToolControl",
+  "short_name": "SEATEK",
+  "description": "Aplicación corporativa de SEATEK Holding S.A.C. para el control de herramientas, equipos, entregas, devoluciones y códigos QR.",
+  "lang": "es-PE",
+  "dir": "ltr",
+  "start_url": "./Index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#07131d",
+  "theme_color": "#07131d",
+  "categories": [
+    "business",
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
