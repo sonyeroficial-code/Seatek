@@ -2263,6 +2263,18 @@ body.associate-scanner-mode #associateQrOverlay{
 #view-stock-detail .section-head p{
   font-size:12px;
 }
+/* Botón Volver ubicado en la esquina superior izquierda */
+#view-stock-detail .history-head{
+  position:relative;
+  display:block;
+  padding-top:54px;
+}
+#view-stock-detail .history-head > .btn{
+  position:absolute;
+  top:0;
+  left:0;
+  margin:0;
+}
 .return-damage-wrap{display:grid;gap:12px}
 .return-photo-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .return-photo-help{color:var(--muted);font-size:12px}
@@ -5546,6 +5558,225 @@ label,
 body.scanner-mode #pwaInstallBox{display:none!important}
 </style>
 
+
+
+<!-- Historial móvil a pantalla completa, sin paneles superpuestos -->
+<style id="tc-history-fullscreen-fix">
+@media (max-width:820px){
+  #view-stock.active{
+    min-height:calc(100dvh - 86px);
+    margin:0 -14px;
+    padding:0 14px calc(112px + env(safe-area-inset-bottom));
+    overflow-x:hidden;
+    background:linear-gradient(180deg,rgba(7,34,42,.96),rgba(4,23,38,.99));
+  }
+
+  #view-stock > .section-head{
+    margin:0;
+    padding:18px 10px 16px;
+  }
+
+  #view-stock > .section-head h2{
+    font-size:25px;
+  }
+
+  #view-stock > .section-head p{
+    max-width:620px;
+    font-size:12px;
+    line-height:1.5;
+  }
+
+  #view-stock .history-page-panel{
+    width:100%;
+    margin:0;
+    padding:0 10px;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+  }
+
+  #view-stock .history-toolbar{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    margin:0 0 12px;
+  }
+
+  #view-stock .history-toolbar input,
+  #view-stock .history-toolbar select{
+    min-height:52px;
+    border-radius:17px;
+  }
+
+  #view-stock .history-group{
+    margin-top:12px;
+  }
+
+  #view-stock .history-group-title{
+    margin:0;
+    padding:0 10px 10px;
+  }
+
+  #view-stock .history-group > .panel{
+    width:100%;
+    margin:0;
+    padding:0 10px;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+  }
+
+  #view-stock .history-movement-item,
+  #view-stock .history-movement-card{
+    border-radius:0;
+    padding:16px 4px;
+    border-bottom:1px solid rgba(255,255,255,.075);
+    background:transparent;
+  }
+
+  #view-stock .history-movement-item:first-child{
+    border-top:1px solid rgba(255,255,255,.075);
+  }
+
+  #view-stock .history-movement-card:hover,
+  #view-stock .history-movement-card:active{
+    transform:none;
+    background:rgba(255,255,255,.025);
+  }
+}
+
+@media (max-width:560px){
+  #view-stock.active{
+    padding-bottom:calc(118px + env(safe-area-inset-bottom));
+  }
+
+  #view-stock > .section-head{
+    padding:16px 10px 14px;
+  }
+
+  #view-stock .history-page-panel{
+    padding:0 8px;
+  }
+
+  #view-stock .history-group > .panel{
+    padding:0 8px;
+  }
+
+  #view-stock .history-movement-item,
+  #view-stock .history-movement-card{
+    padding:15px 4px;
+  }
+}
+</style>
+
+
+<style id="alerts-empty-clean-style">
+#view-alerts .panel.alerts-empty-panel{
+  padding:34px 0 0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+#view-alerts .alerts-empty-panel #alertsList{
+  display:block;
+}
+#view-alerts .alerts-empty-state{
+  min-height:120px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  text-align:center;
+  color:var(--muted);
+}
+#view-alerts .alerts-empty-state h3{
+  margin:0;
+  color:#dce7ed;
+  font-size:17px;
+  line-height:1.2;
+  font-weight:800;
+}
+#view-alerts .alerts-empty-state p{
+  margin:5px 0 0;
+  font-size:12px;
+  line-height:1.4;
+  color:#8299a8;
+}
+@media(max-width:560px){
+  #view-alerts .panel.alerts-empty-panel{padding-top:28px}
+  #view-alerts .alerts-empty-state h3{font-size:16px}
+  #view-alerts .alerts-empty-state p{font-size:11.5px}
+}
+</style>
+
+
+<style id="tc-inventory-empty-clean-style">
+/* Estado vacío limpio para la pantalla de Almacén */
+#view-inventory #inventoryGrid > .empty{
+  grid-column:1 / -1;
+  min-height:0;
+  padding:24px 12px 120px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:var(--muted);
+}
+#view-inventory #inventoryGrid > .empty .eicon{display:none!important}
+#view-inventory #inventoryGrid > .empty h3{
+  margin:0 0 5px;
+  color:#dce7ed;
+  font-size:17px;
+  line-height:1.25;
+  font-weight:800;
+}
+#view-inventory #inventoryGrid > .empty p{
+  margin:0;
+  max-width:300px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+@media(max-width:560px){
+  #view-inventory #inventoryGrid > .empty{padding:20px 8px 110px}
+  #view-inventory #inventoryGrid > .empty h3{font-size:15px}
+  #view-inventory #inventoryGrid > .empty p{font-size:11px;max-width:260px}
+}
+</style>
+
+<style id="tc-active-empty-clean-style">
+/* Estado vacío limpio en Herramientas en uso */
+#view-active #activeGrid > .empty{
+  min-height:150px!important;
+  padding:34px 10px 105px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#view-active #activeGrid > .empty .eicon{display:none!important}
+#view-active #activeGrid > .empty h3{
+  margin:0!important;
+  color:#dce7ed!important;
+  font-size:16px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+}
+#view-active #activeGrid > .empty p{
+  margin:6px 0 0!important;
+  color:var(--muted)!important;
+  font-size:12px!important;
+  line-height:1.4!important;
+}
+@media(max-width:560px){
+  #view-active #activeGrid > .empty{min-height:125px!important;padding:26px 8px 92px!important}
+  #view-active #activeGrid > .empty h3{font-size:15px!important}
+  #view-active #activeGrid > .empty p{font-size:11px!important}
+}
+</style>
+
 </head>
 <body class="auth-locked auth-booting">
 
@@ -6029,18 +6260,36 @@ body.scanner-mode #pwaInstallBox{display:none!important}
         </div>
         <button class="btn danger small" id="emptyTrashBtn" type="button">Vaciar papelera</button>
       </div>
-      <article class="panel trash-panel">
+
+      <div class="trash-type-switch" role="tablist" aria-label="Seleccionar tipo de elemento eliminado">
+        <button class="trash-type-btn active" type="button" role="tab" aria-selected="true" data-trash-tab="products">
+          <b>Productos</b>
+          <span class="trash-tab-count" data-trash-count="products">0</span>
+        </button>
+        <button class="trash-type-btn" type="button" role="tab" aria-selected="false" data-trash-tab="categories">
+          <b>Categorías</b>
+          <span class="trash-tab-count" data-trash-count="categories">0</span>
+        </button>
+        <button class="trash-type-btn" type="button" role="tab" aria-selected="false" data-trash-tab="workers">
+          <b>Trabajadores</b>
+          <span class="trash-tab-count" data-trash-count="workers">0</span>
+        </button>
+      </div>
+
+      <article class="panel trash-panel trash-tab-panel active" data-trash-panel="products">
         <div class="category-trash-title"><div><h3>Productos eliminados</h3><small>Se pueden recuperar durante 30 días.</small></div></div>
         <div class="toolbar">
           <input id="trashSearch" placeholder="Buscar en la papelera...">
         </div>
         <div class="trash-grid" id="trashGrid"></div>
       </article>
-      <article class="panel trash-panel category-trash-section">
+
+      <article class="panel trash-panel trash-tab-panel category-trash-section" data-trash-panel="categories">
         <div class="category-trash-title"><div><h3>Categorías eliminadas</h3><small>Restáuralas o elimínalas definitivamente.</small></div></div>
         <div class="trash-grid" id="categoryTrashGrid"></div>
       </article>
-      <article class="panel trash-panel category-trash-section worker-trash-section">
+
+      <article class="panel trash-panel trash-tab-panel category-trash-section worker-trash-section" data-trash-panel="workers">
         <div class="category-trash-title"><div><h3>Trabajadores eliminados</h3><small>Se conservan 30 días y pueden restaurarse.</small></div></div>
         <div class="trash-grid" id="workerTrashGrid"></div>
       </article>
@@ -7865,7 +8114,7 @@ let workers=JSON.parse(localStorage.getItem("tc2_workers")||"null")||structuredC
 let workerTrash=JSON.parse(localStorage.getItem("tc2_worker_trash")||"null")||[];
 let customRegisterTypes=JSON.parse(localStorage.getItem("tc2_register_types")||"null")||[];
 let categoryTrash=JSON.parse(localStorage.getItem("tc2_category_trash")||"null")||[];
-let deliveryPhoto="",deliverySelection=[],returnDamagePhotos=[],scannerStream=null,detector=null,scanLoop=null,currentView="dashboard",editingPhoto="",editingWorkerPhoto="",itemQrStream=null,itemQrDetector=null,itemQrLoop=null,itemQrAssociationMode=false,itemQrReturnView="register",lastScannedRaw="",lastScannedItemId=null,currentLoanDetailId=null,currentStockEntryId=null,currentWorkerId=null,loanCountdownTimer=null;
+let deliveryPhoto="",deliverySelection=[],returnDamagePhotos=[],scannerStream=null,detector=null,scanLoop=null,currentView="dashboard",editingPhoto="",editingWorkerPhoto="",itemQrStream=null,itemQrDetector=null,itemQrLoop=null,itemQrAssociationMode=false,itemQrReturnView="register",lastScannedRaw="",lastScannedItemId=null,currentLoanDetailId=null,currentStockEntryId=null,currentWorkerId=null,workerDetailActiveTab="assigned",loanCountdownTimer=null;
 const TRASH_RETENTION_MS=30*24*60*60*1000;
 const meta={dashboard:["PANEL DE CONTROL","Resumen operativo"],requests:["REQUERIMIENTOS","Solicitudes de materiales"],scanner:["LECTOR QR","Escanear herramienta"],"scan-detail":["RESULTADO DEL ESCANEO","Detalle de la herramienta"],inventory:["GESTIÓN DEL ALMACÉN","Almacén de herramientas"],register:["REGISTROS","Registrar nuevo"],categories:["GESTIÓN DEL ALMACÉN","Categorías"],trash:["GESTIÓN DEL ALMACÉN","Papelera"],excel:["REPORTES","Exportar registros"],"worker-register":["PERSONAL","Registrar trabajador"],workers:["PERSONAL","Trabajadores registrados"],"worker-detail":["PERSONAL","Ficha del trabajador"],delivery:["OPERACIONES","Nueva entrega"],active:["SEGUIMIENTO","Herramientas en uso"],"loan-detail":["SEGUIMIENTO","Detalle de entrega"],returns:["OPERACIONES","Registrar devolución"],stock:["AUDITORÍA","Historial"],"stock-detail":["AUDITORÍA","Detalle del historial"],alerts:["SEGUIMIENTO","Alertas importantes"]};
 function save(){
@@ -7985,14 +8234,37 @@ function used(id){return loans.filter(l=>l.itemId===id).reduce((a,b)=>a+Number(b
 function available(item){return Math.max(0,Number(item.total)-used(item.id))}
 function overdue(l){return false}
 function toast(t,sub=""){const e=$("#toast"),title=e.querySelector(".toast-title"),subtitle=e.querySelector(".toast-subtitle");title.textContent=t||"Aviso";subtitle.textContent=sub||"";e.classList.toggle("has-subtitle",!!sub);e.classList.add("show");clearTimeout(window.__t);window.__t=setTimeout(()=>e.classList.remove("show"),2600)}
-function openModal(id){$("#"+id).classList.add("open");if(id==="itemModal"){document.body.classList.add("item-modal-open");setMobileRegisterActive(true)}if(id==="returnModal")document.body.classList.add("return-modal-open")} function closeModal(id){$("#"+id).classList.remove("open");if(id==="itemModal"){document.body.classList.remove("item-modal-open");closeAssociateQrOverlay();setMobileRegisterActive(false)}if(id==="returnModal")document.body.classList.remove("return-modal-open")}
+let workerQrLockedScrollY=0;
+function lockWorkerQrBackground(){
+ if(document.body.classList.contains("worker-qr-modal-open"))return;
+ workerQrLockedScrollY=window.scrollY||document.documentElement.scrollTop||0;
+ document.body.classList.add("worker-qr-modal-open");
+ document.body.style.position="fixed";
+ document.body.style.top=`-${workerQrLockedScrollY}px`;
+ document.body.style.left="0";
+ document.body.style.right="0";
+ document.body.style.width="100%";
+}
+function unlockWorkerQrBackground(){
+ if(!document.body.classList.contains("worker-qr-modal-open"))return;
+ document.body.classList.remove("worker-qr-modal-open");
+ document.body.style.removeProperty("position");
+ document.body.style.removeProperty("top");
+ document.body.style.removeProperty("left");
+ document.body.style.removeProperty("right");
+ document.body.style.removeProperty("width");
+ window.scrollTo(0,workerQrLockedScrollY);
+}
+function openModal(id){$("#"+id).classList.add("open");if(id==="workerQrModal")lockWorkerQrBackground();if(id==="itemModal"){document.body.classList.add("item-modal-open");setMobileRegisterActive(true)}if(id==="returnModal")document.body.classList.add("return-modal-open");if(id==="registerTypeModal")document.body.classList.add("register-type-modal-open")} function closeModal(id){$("#"+id).classList.remove("open");if(id==="workerQrModal")unlockWorkerQrBackground();if(id==="itemModal"){document.body.classList.remove("item-modal-open");closeAssociateQrOverlay();setMobileRegisterActive(false)}if(id==="returnModal")document.body.classList.remove("return-modal-open");if(id==="registerTypeModal")document.body.classList.remove("register-type-modal-open")}
 function empty(text){return `<div class="empty"><div class="eicon">✓</div><h3>Sin resultados</h3><p>${text}</p></div>`}
+function workerDetailEmpty(text){return `<div class="worker-empty-plain"><h3>Sin resultados</h3><p>${text}</p></div>`}
 function badgeLoan(l){if(l.priority==="Crítica")return `<span class="badge red">Crítica</span>`;if(l.priority==="Importante")return `<span class="badge amber">Importante</span>`;return `<span class="badge blue">En uso</span>`}
 function avatar(obj){return `<div class="avatar">${obj.photo?`<img src="${obj.photo}" alt="">`:initials(obj.itemName||obj.name)}</div>`}
 function closeAllFloatingUi(){
   closeAssociateQrOverlay(false);
   stopItemQrScanner();
   $$(".modal-bg.open").forEach(m=>m.classList.remove("open"));
+  unlockWorkerQrBackground();
   document.body.classList.remove("item-modal-open");
   setMobileRegisterActive(false);
 }
@@ -8218,7 +8490,7 @@ function workerHistoryEntries(worker){
  const name=worker.fullName.trim().toLowerCase();
  return stockHistory.filter(row=>row.workerId===worker.id||String(row.detail||"").toLowerCase().includes(name));
 }
-function showWorker(id){currentWorkerId=id;renderWorkerDetail();go("worker-detail")}
+function showWorker(id){currentWorkerId=id;workerDetailActiveTab="assigned";renderWorkerDetail();go("worker-detail")}
 function workerActiveLoans(worker){
  const name=String(worker?.fullName||"").trim().toLowerCase();
  return loans.filter(loan=>Number(loan.workerId)===Number(worker?.id)||String(loan.worker||"").trim().toLowerCase()===name);
@@ -8306,18 +8578,19 @@ function renderWorkerDetail(){
  const history=workerHistoryEntries(w);
  const deliveries=history.filter(h=>h.kind==="Entrega").length;
  const returns=history.filter(h=>h.kind==="Devolución").length;
+ const selectedWorkerTab=workerDetailActiveTab==="history"?"history":"assigned";
  const fields=[
   ["DNI",w.dni],["Celular",w.phone||"No registrado"],["Cargo",w.role||"No registrado"],["Área",w.area||"No registrada"],["Correo",w.email||"No registrado"],["Dirección",w.address||"No registrada"]
  ];
- const currentHtml=activeLoans.map(l=>`<div class="worker-history-row"><div class="worker-history-icon">↗</div><div class="worker-history-copy"><b>${l.itemName}</b><small>${l.code} · ${l.job}<br>Entregada ${fmt(l.createdAt)}</small></div><span class="worker-history-qty">${l.qty}</span></div>`).join("")||empty("No tiene herramientas asignadas actualmente.");
+ const currentHtml=activeLoans.map(l=>`<div class="worker-history-row"><div class="worker-history-icon">↗</div><div class="worker-history-copy"><b>${l.itemName}</b><small>${l.code} · ${l.job}<br>Entregada ${fmt(l.createdAt)}</small></div><span class="worker-history-qty">${l.qty}</span></div>`).join("")||workerDetailEmpty("No tiene herramientas asignadas actualmente.");
  const historyHtml=history.slice(0,30).map(h=>{
   const rowClass=h.kind==="Devolución"?"history-return":h.kind==="Entrega"?"history-delivery":"history-other";
   const qtyClass=h.kind==="Devolución"?"qty-positive":h.kind==="Entrega"?"qty-negative":"qty-neutral";
   const icon=h.kind==="Devolución"?"↩":h.kind==="Entrega"?"↗":"◷";
   const kindLabel=historyKindLabel(h.kind);
   return `<button class="worker-history-row ${rowClass}" type="button" onclick="openStockDetail('${h.id}')"><div class="worker-history-icon">${icon}</div><div class="worker-history-copy"><div class="worker-history-title"><b>${kindLabel}: ${h.itemName}</b><span class="history-kind-badge">${kindLabel}</span></div><small class="worker-history-date">${fmtDateCompact(h.date)} · ${fmtTimeOnly(h.date)}</small><small class="worker-history-detail">${h.detail||"Sin detalle"}</small></div><span class="worker-history-qty ${qtyClass}">${stockDeltaText(h)}</span></button>`;
- }).join("")||empty("Todavía no tiene movimientos registrados.");
- box.innerHTML=`<div class="worker-profile"><article class="worker-profile-hero">${workerAvatar(w)}<div><h3>${w.fullName}</h3><p>${w.role||"Sin cargo"}${w.area?` · ${w.area}`:""}</p><span class="worker-status ${w.status==="Inactivo"?"inactive":""}">${w.status}</span></div><div class="worker-detail-actions"><button class="btn ghost small" type="button" onclick="editWorker(${w.id})">Editar datos</button><button class="btn danger small" type="button" onclick="requestDeleteWorker(${w.id})">🗑 Eliminar trabajador</button></div></article><article class="panel"><div class="worker-data-grid">${fields.map(([label,val])=>`<div class="worker-data-box"><small>${label}</small><b>${val}</b></div>`).join("")}</div></article><div class="worker-stats"><div class="worker-stat"><small>En uso</small><strong>${activeLoans.reduce((a,l)=>a+Number(l.qty),0)}</strong></div><div class="worker-stat"><small>Entregas</small><strong>${deliveries}</strong></div><div class="worker-stat"><small>Devoluciones</small><strong>${returns}</strong></div></div><article class="panel"><div class="panel-head"><div><h3>Herramientas asignadas</h3><p>Lo que tiene actualmente.</p></div></div><div class="worker-history-list">${currentHtml}</div></article><article class="panel"><div class="panel-head"><div><h3>Historial del trabajador</h3><p>Entregas, devoluciones y movimientos relacionados.</p></div></div><div class="worker-history-list">${historyHtml}</div></article></div>`;
+ }).join("")||workerDetailEmpty("Todavía no tiene movimientos registrados.");
+ box.innerHTML=`<div class="worker-profile"><article class="worker-profile-hero">${workerAvatar(w)}<div><h3>${w.fullName}</h3><p>${w.role||"Sin cargo"}${w.area?` · ${w.area}`:""}</p><span class="worker-status ${w.status==="Inactivo"?"inactive":""}">${w.status}</span></div><div class="worker-detail-actions"><button class="btn ghost small" type="button" onclick="editWorker(${w.id})">Editar datos</button><button class="btn danger small" type="button" onclick="requestDeleteWorker(${w.id})">🗑 Eliminar trabajador</button></div></article><article class="panel"><div class="worker-data-grid">${fields.map(([label,val])=>`<div class="worker-data-box"><small>${label}</small><b>${val}</b></div>`).join("")}</div></article><div class="worker-stats"><div class="worker-stat"><small>En uso</small><strong>${activeLoans.reduce((a,l)=>a+Number(l.qty),0)}</strong></div><div class="worker-stat"><small>Entregas</small><strong>${deliveries}</strong></div><div class="worker-stat"><small>Devoluciones</small><strong>${returns}</strong></div></div><div class="worker-detail-switch" role="tablist" aria-label="Seleccionar vista del trabajador"><button class="worker-detail-tab ${selectedWorkerTab==="assigned"?"active":""}" type="button" aria-selected="${selectedWorkerTab==="assigned"}" data-worker-tab="assigned" onclick="switchWorkerDetailTab(this,'assigned')"><b>Herramientas asignadas</b><span>${activeLoans.length}</span></button><button class="worker-detail-tab ${selectedWorkerTab==="history"?"active":""}" type="button" aria-selected="${selectedWorkerTab==="history"}" data-worker-tab="history" onclick="switchWorkerDetailTab(this,'history')"><b>Historial del trabajador</b><span>${history.length}</span></button></div><article class="panel worker-detail-panel ${selectedWorkerTab==="assigned"?"active":""}" data-worker-panel="assigned"><div class="panel-head worker-panel-head"><div><h3>Herramientas asignadas</h3><p>Lo que tiene actualmente.</p></div></div><div class="worker-history-list">${currentHtml}</div></article><article class="panel worker-detail-panel ${selectedWorkerTab==="history"?"active":""}" data-worker-panel="history"><div class="panel-head worker-panel-head"><div><h3>Historial del trabajador</h3><p>Entregas, devoluciones y movimientos relacionados.</p></div></div><div class="worker-history-list">${historyHtml}</div></article></div>`;
 }
 
 function dashboardIsToday(value){
@@ -9351,7 +9624,15 @@ function openStockDetail(id){
  go("stock-detail");
 }
 
-function renderAlerts(){const data=loans.filter(l=>["Importante","Crítica"].includes(l.priority));$("#alertsList").innerHTML=data.map(l=>`<div class="record"><div class="avatar" style="color:var(--amber)">!</div><div><div class="title">${l.itemName} · ${l.worker}</div><div class="meta">Prioridad ${l.priority.toLowerCase()} · ${l.job}<br>Entrega ${fmt(l.createdAt)}</div></div>${badgeLoan(l)}</div>`).join("")||empty("Todo está bajo control.")}
+function renderAlerts(){
+  const data=loans.filter(l=>["Importante","Crítica"].includes(l.priority));
+  const list=$("#alertsList");
+  const panel=list?.closest(".panel");
+  panel?.classList.toggle("alerts-empty-panel",data.length===0);
+  list.innerHTML=data.length
+    ? data.map(l=>`<div class="record"><div class="avatar" style="color:var(--amber)">!</div><div><div class="title">${l.itemName} · ${l.worker}</div><div class="meta">Prioridad ${l.priority.toLowerCase()} · ${l.job}<br>Entrega ${fmt(l.createdAt)}</div></div>${badgeLoan(l)}</div>`).join("")
+    : `<div class="alerts-empty-state"><h3>Sin resultados</h3><p>Todo está bajo control.</p></div>`;
+}
 function renderAll(){populateWorkers();populateDelivery();renderDashboard();renderInventory();renderRegisterChoices();renderCategories();renderTrash();renderWorkers();renderWorkerDetail();renderActive();renderLoanDetail();renderReturns();renderStock();renderStockDetail();renderAlerts();if(typeof renderExcelExport==="function")renderExcelExport();setTimeout(()=>{syncDeliveryWorkerSelection();updateDeliverySubmitState()},0)}
 async function compress(file,max=850,q=.78){
  if(!file)throw new Error("No se recibió la imagen");
@@ -10950,17 +11231,24 @@ renderAll();
   font-size:11px !important;
   margin-left:auto !important;
 }
+#view-trash.active{
+  display:grid !important;
+  gap:14px !important;
+}
+#view-trash:not(.active){
+  display:none !important;
+}
 #view-trash .trash-panel{
-  padding:11px !important;
-  border-radius:18px !important;
-  margin-bottom:10px !important;
+  padding:14px !important;
+  border-radius:20px !important;
+  margin:0 !important;
   box-shadow:0 12px 30px rgba(0,0,0,.22) !important;
 }
 #view-trash .category-trash-section{
-  margin-top:10px !important;
+  margin-top:0 !important;
 }
 #view-trash .category-trash-title{
-  margin:0 0 8px !important;
+  margin:0 0 10px !important;
   padding:0 2px !important;
 }
 #view-trash .category-trash-title h3{
@@ -10974,7 +11262,7 @@ renderAll();
   line-height:1.35 !important;
 }
 #view-trash .toolbar{
-  margin-bottom:8px !important;
+  margin-bottom:10px !important;
 }
 #view-trash .toolbar input{
   min-height:42px !important;
@@ -10987,22 +11275,28 @@ renderAll();
   gap:8px !important;
 }
 #view-trash .empty{
-  min-height:132px !important;
-  padding:16px 12px !important;
-  border-radius:15px !important;
+  min-height:auto !important;
+  padding:6px 4px 2px !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  display:block !important;
+  text-align:left !important;
+  color:var(--muted) !important;
 }
 #view-trash .empty .eicon{
-  font-size:30px !important;
-  line-height:1 !important;
+  display:none !important;
 }
 #view-trash .empty h3{
-  margin:7px 0 3px !important;
-  font-size:17px !important;
+  margin:0 !important;
+  font-size:15px !important;
   line-height:1.2 !important;
+  color:#eaf3f8 !important;
 }
 #view-trash .empty p{
-  font-size:11.5px !important;
-  line-height:1.4 !important;
+  margin:4px 0 0 !important;
+  font-size:11px !important;
+  line-height:1.45 !important;
 }
 #view-trash .trash-card{
   padding:10px !important;
@@ -11061,13 +11355,16 @@ renderAll();
     padding:0 12px !important;
     font-size:10.5px !important;
   }
+  #view-trash{
+    gap:10px !important;
+  }
   #view-trash .trash-panel{
-    padding:10px !important;
-    border-radius:16px !important;
-    margin-bottom:8px !important;
+    padding:12px !important;
+    border-radius:18px !important;
+    margin:0 !important;
   }
   #view-trash .category-trash-section{
-    margin-top:8px !important;
+    margin-top:0 !important;
   }
   #view-trash .category-trash-title h3{
     font-size:16px !important;
@@ -11081,18 +11378,15 @@ renderAll();
     font-size:11.5px !important;
   }
   #view-trash .empty{
-    min-height:118px !important;
-    padding:13px 10px !important;
-  }
-  #view-trash .empty .eicon{
-    font-size:27px !important;
+    padding:4px 2px 0 !important;
   }
   #view-trash .empty h3{
-    font-size:16px !important;
-    margin-top:6px !important;
+    font-size:14px !important;
+    margin:0 !important;
   }
   #view-trash .empty p{
-    font-size:11px !important;
+    font-size:10.5px !important;
+    margin-top:4px !important;
   }
 }
 </style>
@@ -13557,6 +13851,9 @@ renderAll();
 <style id="v98-worker-public-qr-style">
 #workerQrModal{padding:18px 14px calc(96px + env(safe-area-inset-bottom))!important;align-items:center!important;justify-content:center!important}
 #workerQrModal .modal{width:min(420px,100%);max-height:calc(100dvh - 132px);overflow:auto;padding:16px;border-radius:26px;background:linear-gradient(160deg,#071e2b 0%,#0a2a39 58%,#0c3441 100%);border:1px solid rgba(76,224,181,.2);box-shadow:0 24px 70px rgba(0,0,0,.55)}
+body.worker-qr-modal-open{overflow:hidden!important;overscroll-behavior:none!important}
+#workerQrModal{overscroll-behavior:none;touch-action:none}
+#workerQrModal .modal{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 #workerQrModal .modal-head{margin-bottom:12px;align-items:flex-start}
 #workerQrModal .modal-head h3{font-size:18px;margin:0 0 3px;color:#f4fbff}
 #workerQrModal .modal-head p{font-size:11px;line-height:1.4;color:#8fa9b6;margin:0}
@@ -15444,6 +15741,409 @@ renderAll();
   }
 })();
 </script>
+
+<style id="tc-trash-selector-style">
+#view-trash .trash-type-switch{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  padding:6px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:18px;
+  background:rgba(10,29,42,.78);
+}
+#view-trash .trash-type-btn{
+  min-width:0;
+  min-height:50px;
+  padding:7px 5px;
+  border:1px solid transparent;
+  border-radius:13px;
+  background:transparent;
+  color:#91a8b7;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  position:relative;
+  transition:.2s ease;
+}
+#view-trash .trash-type-btn b{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10.5px;
+}
+#view-trash .trash-tab-count{
+  min-width:19px;
+  height:19px;
+  padding:0 5px;
+  border-radius:999px;
+  display:inline-grid;
+  place-items:center;
+  background:rgba(255,255,255,.07);
+  color:#b7cad5;
+  font-size:8.5px;
+  font-weight:900;
+}
+#view-trash .trash-type-btn.active{
+  color:#06251b;
+  border-color:rgba(132,246,207,.45);
+  background:linear-gradient(135deg,var(--mint),var(--mint2));
+  box-shadow:0 10px 24px rgba(44,224,163,.16);
+}
+#view-trash .trash-type-btn.active .trash-tab-count{
+  background:rgba(5,37,27,.12);
+  color:#073326;
+}
+#view-trash .trash-tab-panel{
+  display:none !important;
+}
+#view-trash .trash-tab-panel.active{
+  display:block !important;
+}
+#view-trash .category-trash-title{
+  justify-content:center !important;
+  text-align:center !important;
+}
+#view-trash .category-trash-title>div{
+  width:100%;
+}
+#view-trash .empty{
+  text-align:center !important;
+  padding:14px 5px 8px !important;
+}
+#view-trash .empty h3,
+#view-trash .empty p{
+  text-align:center !important;
+}
+#view-trash .empty h3{
+  font-size:14px !important;
+}
+#view-trash .empty p{
+  font-size:10.5px !important;
+}
+@media(max-width:560px){
+  #view-trash .trash-type-switch{
+    gap:5px;
+    padding:5px;
+    border-radius:16px;
+  }
+  #view-trash .trash-type-btn{
+    min-height:48px;
+    padding:6px 3px;
+    border-radius:12px;
+  }
+  #view-trash .trash-type-btn b{
+    font-size:9.3px;
+  }
+  #view-trash .trash-tab-count{
+    position:absolute;
+    top:4px;
+    right:4px;
+    min-width:16px;
+    height:16px;
+    font-size:7.5px;
+  }
+}
+</style>
+
+<script id="tc-trash-selector-script">
+(() => {
+  const setup = () => {
+    const view = document.getElementById("view-trash");
+    if (!view || view.dataset.trashSelectorReady === "1") return;
+    view.dataset.trashSelectorReady = "1";
+
+    const buttons = [...view.querySelectorAll("[data-trash-tab]")];
+    const panels = [...view.querySelectorAll("[data-trash-panel]")];
+    const sources = {
+      products: document.getElementById("trashGrid"),
+      categories: document.getElementById("categoryTrashGrid"),
+      workers: document.getElementById("workerTrashGrid")
+    };
+
+    const countItems = element => {
+      if (!element) return 0;
+      return [...element.children].filter(child =>
+        !child.classList.contains("empty") && !child.hidden
+      ).length;
+    };
+
+    const refreshCounts = () => {
+      Object.entries(sources).forEach(([key, element]) => {
+        const target = view.querySelector(`[data-trash-count="${key}"]`);
+        if (target) target.textContent = String(countItems(element));
+      });
+    };
+
+    const selectTab = key => {
+      buttons.forEach(button => {
+        const active = button.dataset.trashTab === key;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-selected", String(active));
+      });
+      panels.forEach(panel => {
+        panel.classList.toggle("active", panel.dataset.trashPanel === key);
+      });
+    };
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => selectTab(button.dataset.trashTab));
+    });
+
+    Object.values(sources).forEach(element => {
+      if (element) {
+        new MutationObserver(refreshCounts).observe(element, {
+          childList: true,
+          subtree: true
+        });
+      }
+    });
+
+    selectTab("products");
+    refreshCounts();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setup, { once: true });
+  } else {
+    setup();
+  }
+})();
+</script>
+
+<style id="tc-history-empty-clean-style">
+/* Estado vacío limpio para Historial */
+#view-stock #stockHistory > .empty{
+  min-height:auto !important;
+  padding:24px 4px 10px !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  display:block !important;
+  text-align:center !important;
+  color:var(--muted) !important;
+}
+#view-stock #stockHistory > .empty .eicon{
+  display:none !important;
+}
+#view-stock #stockHistory > .empty h3{
+  margin:0 !important;
+  color:#eaf3f8 !important;
+  font-size:15px !important;
+  line-height:1.2 !important;
+  text-align:center !important;
+}
+#view-stock #stockHistory > .empty p{
+  margin:5px 0 0 !important;
+  color:var(--muted) !important;
+  font-size:11px !important;
+  line-height:1.45 !important;
+  text-align:center !important;
+}
+@media(max-width:560px){
+  #view-stock #stockHistory > .empty{
+    padding:20px 3px 8px !important;
+  }
+  #view-stock #stockHistory > .empty h3{
+    font-size:14px !important;
+  }
+  #view-stock #stockHistory > .empty p{
+    font-size:10.5px !important;
+  }
+}
+</style>
+
+<style id="worker-detail-tabs-style">
+.worker-detail-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:6px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(10,29,42,.72)}
+.worker-detail-tab{min-width:0;min-height:50px;border:1px solid transparent;border-radius:14px;background:transparent;color:#97acb9;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 10px;transition:.2s}
+.worker-detail-tab b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.worker-detail-tab span{min-width:20px;height:20px;padding:0 5px;border-radius:999px;display:inline-grid;place-items:center;background:rgba(255,255,255,.07);font-size:9px;font-weight:900;color:#bfd0da}
+.worker-detail-tab.active{color:#06251b;border-color:rgba(132,246,207,.45);background:linear-gradient(135deg,var(--mint),var(--mint2));box-shadow:0 10px 24px rgba(44,224,163,.16)}
+.worker-detail-tab.active span{background:rgba(5,37,27,.12);color:#073326}
+.worker-detail-panel{display:none}.worker-detail-panel.active{display:block}
+.worker-panel-head{justify-content:center}.worker-panel-head>div{text-align:center;width:100%}
+.worker-empty-plain{padding:12px 4px 4px;text-align:center}.worker-empty-plain h3{margin:0;color:#ecf4f8;font-size:15px;line-height:1.2}.worker-empty-plain p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.45}
+@media(max-width:560px){.worker-detail-switch{gap:6px;padding:5px;border-radius:16px}.worker-detail-tab{min-height:48px;padding:6px 8px;border-radius:12px}.worker-detail-tab b{font-size:9.5px}.worker-detail-tab span{position:absolute;top:5px;right:5px;min-width:16px;height:16px;font-size:7.5px}.worker-detail-tab{position:relative}.worker-empty-plain{padding:10px 2px 2px}.worker-empty-plain h3{font-size:14px}.worker-empty-plain p{font-size:10.5px}}
+</style>
+<script id="worker-detail-tabs-script">
+function switchWorkerDetailTab(button,key){workerDetailActiveTab=key==='history'?'history':'assigned';const root=button.closest('.worker-profile');if(!root)return;root.querySelectorAll('.worker-detail-tab').forEach(btn=>{const active=btn.dataset.workerTab===workerDetailActiveTab||((!btn.dataset.workerTab)&&btn===button);btn.classList.toggle('active',active);btn.setAttribute('aria-selected',String(active));});root.querySelectorAll('.worker-detail-panel').forEach(panel=>{panel.classList.toggle('active',panel.dataset.workerPanel===workerDetailActiveTab);});}
+</script>
+
+<style id="register-category-fullscreen-style">
+body.register-type-modal-open{
+  overflow:hidden !important;
+  overscroll-behavior:none !important;
+}
+body.register-type-modal-open .mobile-nav,
+body.register-type-modal-open #v130ChatLauncher,
+body.register-type-modal-open .v138-chat-plus,
+body.register-type-modal-open .more-sheet,
+body.register-type-modal-open .sheet-overlay{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+#registerTypeModal{
+  z-index:22000 !important;
+  padding:0 !important;
+  background:#071923 !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  overscroll-behavior:none !important;
+}
+#registerTypeModal.open{
+  display:block !important;
+}
+#registerTypeModal .modal{
+  width:100% !important;
+  max-width:none !important;
+  min-height:100svh !important;
+  height:100dvh !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  overflow:hidden !important;
+  display:grid !important;
+  grid-template-rows:auto minmax(0,1fr) auto !important;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(44,224,163,.08),transparent 28%),
+    linear-gradient(180deg,#092230 0%,#071923 100%) !important;
+  box-shadow:none !important;
+}
+#registerTypeModal .modal-head{
+  position:relative !important;
+  top:auto !important;
+  z-index:2 !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:calc(18px + env(safe-area-inset-top)) 20px 16px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:16px !important;
+  background:transparent !important;
+  border-bottom:1px solid rgba(255,255,255,.07) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+#registerTypeModal .modal-head>div{
+  min-width:0 !important;
+}
+#registerTypeModal .modal-head h3{
+  margin:0 !important;
+  font-size:24px !important;
+  line-height:1.12 !important;
+  letter-spacing:-.45px !important;
+}
+#registerTypeModal .modal-head p{
+  margin:6px 0 0 !important;
+  max-width:520px !important;
+  color:#90a8b7 !important;
+  font-size:11.5px !important;
+  line-height:1.45 !important;
+}
+#registerTypeModal .modal-head button{
+  flex:0 0 44px !important;
+  width:44px !important;
+  height:44px !important;
+  border-radius:14px !important;
+  background:rgba(255,255,255,.055) !important;
+  border:1px solid rgba(255,255,255,.075) !important;
+}
+#registerTypeModal .form-grid{
+  min-height:0 !important;
+  width:100% !important;
+  max-width:760px !important;
+  margin:0 auto !important;
+  padding:20px 20px 26px !important;
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  align-content:start !important;
+  gap:15px !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+#registerTypeModal .field{
+  gap:7px !important;
+}
+#registerTypeModal .field>span{
+  color:#bed0db !important;
+  font-size:9.5px !important;
+  letter-spacing:1.1px !important;
+}
+#registerTypeModal input,
+#registerTypeModal select{
+  min-height:51px !important;
+  height:51px !important;
+  padding:0 14px !important;
+  border-radius:14px !important;
+  background:rgba(5,25,37,.82) !important;
+  border-color:rgba(255,255,255,.085) !important;
+  font-size:14px !important;
+}
+#registerTypeModal .modal-actions{
+  position:relative !important;
+  bottom:auto !important;
+  z-index:2 !important;
+  width:100% !important;
+  max-width:760px !important;
+  margin:0 auto !important;
+  padding:12px 20px calc(14px + env(safe-area-inset-bottom)) !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px !important;
+  background:transparent !important;
+  border-top:1px solid rgba(255,255,255,.07) !important;
+}
+#registerTypeModal .modal-actions .btn{
+  min-height:47px !important;
+  border-radius:14px !important;
+  font-size:12px !important;
+}
+@media(max-width:560px){
+  #registerTypeModal .modal-head{
+    padding:calc(14px + env(safe-area-inset-top)) 16px 13px !important;
+  }
+  #registerTypeModal .modal-head h3{
+    font-size:21px !important;
+  }
+  #registerTypeModal .modal-head p{
+    font-size:10.5px !important;
+  }
+  #registerTypeModal .modal-head button{
+    width:42px !important;
+    height:42px !important;
+    flex-basis:42px !important;
+  }
+  #registerTypeModal .form-grid{
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+    padding:16px 16px 22px !important;
+  }
+  #registerTypeModal .field.full{
+    grid-column:auto !important;
+  }
+  #registerTypeModal input,
+  #registerTypeModal select{
+    min-height:49px !important;
+    height:49px !important;
+    font-size:13.5px !important;
+  }
+  #registerTypeModal .modal-actions{
+    padding:11px 16px calc(12px + env(safe-area-inset-bottom)) !important;
+    gap:8px !important;
+  }
+  #registerTypeModal .modal-actions .btn{
+    min-height:45px !important;
+    font-size:11.5px !important;
+  }
+}
+</style>
 
 </body>
 </html>
