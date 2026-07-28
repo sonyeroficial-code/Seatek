@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#07131d">
-<title>SEATEK Holding S.A.C. · ToolControl</title><!-- v180: firma del almacenero apoyada sobre la línea, sin flotar --><!-- v170 fix: menu disponible también en encargado -->
+<title>SEATEK Holding S.A.C.</title><!-- v180: firma del almacenero apoyada sobre la línea, sin flotar --><!-- v170 fix: menu disponible también en encargado -->
 <style>
 :root{
   --bg:#06111a;--bg2:#081a26;--panel:#0d2230;--panel2:#102a3a;--line:rgba(255,255,255,.08);
@@ -5519,126 +5519,31 @@ label,
 </style>
 
 
-<!-- PWA SEATEK: instalación en iPhone, Android y computadoras -->
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="apple-touch-icon" sizes="180x180" href="./icon-180.png">
+<link rel="apple-touch-icon" href="./icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <meta name="application-name" content="SEATEK Holding S.A.C.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SEATEK">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="format-detection" content="telephone=no">
-<meta name="msapplication-TileColor" content="#07131d">
-
-<style id="seatek-pwa-install-style">
-  .seatek-pwa-install{
-    position:fixed;
-    right:18px;
-    bottom:18px;
-    z-index:10000;
-    width:min(430px,calc(100vw - 28px));
-    padding:14px;
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:20px;
-    background:linear-gradient(145deg,rgba(7,19,29,.98),rgba(11,32,45,.98));
-    color:#f7fbfd;
-    box-shadow:0 24px 70px rgba(0,0,0,.46);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-    transform:translateY(26px);
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .25s ease,transform .25s ease;
-  }
-  .seatek-pwa-install.show{
-    opacity:1;
-    transform:none;
-    pointer-events:auto;
-  }
-  .seatek-pwa-install__row{
-    display:grid;
-    grid-template-columns:52px 1fr auto;
-    gap:12px;
-    align-items:start;
-  }
-  .seatek-pwa-install__icon{
-    width:52px;
-    height:52px;
-    border-radius:15px;
-    object-fit:cover;
-    background:#fff;
-    padding:3px;
-  }
-  .seatek-pwa-install h3{
-    margin:1px 0 4px;
-    font-size:15px;
-    line-height:1.25;
-  }
-  .seatek-pwa-install p{
-    margin:0;
-    color:#aec1cd;
-    font-size:11.5px;
-    line-height:1.45;
-  }
-  .seatek-pwa-install__close{
-    width:34px;
-    height:34px;
-    border:0;
-    border-radius:11px;
-    background:rgba(255,255,255,.07);
-    color:#fff;
-    font-size:20px;
-    line-height:1;
-  }
-  .seatek-pwa-install__actions{
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:9px;
-    margin-top:12px;
-  }
-  .seatek-pwa-install__button{
-    min-height:44px;
-    border:0;
-    border-radius:13px;
-    padding:0 15px;
-    background:linear-gradient(135deg,#2ce0a3,#8df4ca);
-    color:#05251a;
-    font-weight:900;
-  }
-  .seatek-pwa-install__later{
-    min-height:44px;
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:13px;
-    padding:0 14px;
-    background:rgba(255,255,255,.045);
-    color:#dbe8ee;
-    font-weight:800;
-  }
-  .seatek-pwa-ios-help{
-    display:none;
-    margin-top:10px;
-    padding:10px 11px;
-    border-radius:13px;
-    background:rgba(91,185,255,.08);
-    border:1px solid rgba(91,185,255,.14);
-    color:#cce8fb;
-    font-size:11px;
-    line-height:1.45;
-  }
-  .seatek-pwa-install.ios .seatek-pwa-ios-help{display:block}
-  body.scanner-mode .seatek-pwa-install{display:none!important}
-  @media(max-width:820px){
-    .seatek-pwa-install{
-      left:14px;
-      right:14px;
-      bottom:calc(88px + env(safe-area-inset-bottom));
-      width:auto;
-    }
-  }
-  @media(display-mode:standalone){
-    .seatek-pwa-install{display:none!important}
-  }
+<style id="pwa-seatek-style">
+#pwaInstallBox{position:fixed;left:14px;right:14px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:999999;display:none;max-width:430px;margin:auto;padding:14px;color:#fff;background:linear-gradient(145deg,#07131d,#0d2635);border:1px solid rgba(255,255,255,.14);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.48);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+#pwaInstallBox.show{display:block}
+#pwaInstallBox .pwaHead{display:grid;grid-template-columns:50px 1fr 34px;gap:11px;align-items:start}
+#pwaInstallBox img{width:50px;height:50px;border-radius:14px;background:#fff;padding:3px}
+#pwaInstallBox h3{margin:1px 0 4px;font-size:15px}
+#pwaInstallBox p{margin:0;color:#aec1cd;font-size:11.5px;line-height:1.45}
+#pwaInstallBox .pwaClose{width:34px;height:34px;border:0;border-radius:11px;background:rgba(255,255,255,.07);color:#fff;font-size:20px}
+#pwaInstallBox .pwaActions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+#pwaInstallBtn,#pwaLaterBtn{min-height:44px;border-radius:13px;padding:0 14px;font-weight:900}
+#pwaInstallBtn{border:0;background:linear-gradient(135deg,#2ce0a3,#8df4ca);color:#05251a}
+#pwaLaterBtn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.045);color:#fff}
+#pwaIosHelp{display:none;margin-top:10px;padding:10px;border-radius:12px;background:rgba(91,185,255,.08);color:#d5efff;font-size:11px;line-height:1.45}
+#pwaInstallBox.ios #pwaIosHelp{display:block}
+@media(min-width:821px){#pwaInstallBox{left:auto;right:18px;bottom:18px;margin:0}}
+@media(display-mode:standalone){#pwaInstallBox{display:none!important}}
+body.scanner-mode #pwaInstallBox{display:none!important}
 </style>
 
 </head>
@@ -15473,115 +15378,68 @@ renderAll();
 </style>
 
 
-<!-- Aviso personalizado para instalar la aplicación -->
-<section id="seatekPwaInstall" class="seatek-pwa-install" aria-live="polite" aria-label="Instalar aplicación SEATEK">
-  <div class="seatek-pwa-install__row">
-    <img class="seatek-pwa-install__icon" src="./icon-192.png" alt="Logo SEATEK">
+<div id="pwaInstallBox" aria-live="polite">
+  <div class="pwaHead">
+    <img src="./icon-192.png" alt="SEATEK">
     <div>
       <h3>Instala SEATEK como aplicación</h3>
-      <p id="seatekPwaInstallText">Accede más rápido y úsala a pantalla completa desde tu iPhone, Android o computadora.</p>
+      <p id="pwaMessage">Accede más rápido y úsala a pantalla completa.</p>
     </div>
-    <button id="seatekPwaClose" class="seatek-pwa-install__close" type="button" aria-label="Cerrar">×</button>
+    <button id="pwaCloseBtn" class="pwaClose" type="button">×</button>
   </div>
-  <div id="seatekPwaIosHelp" class="seatek-pwa-ios-help">
-    En iPhone toca <b>Compartir</b> y selecciona <b>Agregar a pantalla de inicio</b>. En Chrome para iPhone abre el menú de compartir y elige la misma opción.
+  <div id="pwaIosHelp">En iPhone toca <b>Compartir</b> y luego <b>Agregar a pantalla de inicio</b>.</div>
+  <div class="pwaActions">
+    <button id="pwaInstallBtn" type="button">Instalar aplicación</button>
+    <button id="pwaLaterBtn" type="button">Ahora no</button>
   </div>
-  <div class="seatek-pwa-install__actions">
-    <button id="seatekPwaInstallButton" class="seatek-pwa-install__button" type="button">Instalar aplicación</button>
-    <button id="seatekPwaLater" class="seatek-pwa-install__later" type="button">Ahora no</button>
-  </div>
-</section>
-
-<script id="seatek-pwa-install-script">
+</div>
+<script id="pwa-seatek-script">
 (() => {
-  "use strict";
-
-  const banner = document.getElementById("seatekPwaInstall");
-  const installButton = document.getElementById("seatekPwaInstallButton");
-  const closeButton = document.getElementById("seatekPwaClose");
-  const laterButton = document.getElementById("seatekPwaLater");
-  const text = document.getElementById("seatekPwaInstallText");
-
-  if (!banner || !installButton) return;
-
   let deferredPrompt = null;
-  const standalone =
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone === true;
-
+  const box = document.getElementById("pwaInstallBox");
+  const btn = document.getElementById("pwaInstallBtn");
+  const close = document.getElementById("pwaCloseBtn");
+  const later = document.getElementById("pwaLaterBtn");
+  const message = document.getElementById("pwaMessage");
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   const ua = navigator.userAgent || "";
-  const isIOS = /iPad|iPhone|iPod/.test(ua) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const isChrome =
-    /Chrome|CriOS/.test(ua) &&
-    !/Edg|EdgiOS|OPR|SamsungBrowser/.test(ua);
-
-  const showBanner = () => {
-    if (standalone) return;
-    banner.classList.toggle("ios", isIOS);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const show = () => {
+    if (isStandalone) return;
     if (isIOS) {
-      installButton.textContent = "Ver cómo instalar";
-      text.textContent = "Guarda SEATEK en la pantalla de inicio para abrirla como una aplicación.";
-    } else if (!isChrome) {
-      text.textContent = "Puedes agregar SEATEK a la pantalla de inicio desde el menú de tu navegador.";
+      box.classList.add("ios");
+      btn.textContent = "Ver cómo instalar";
     }
-    banner.classList.add("show");
+    box.classList.add("show");
   };
-
-  const hideBanner = () => banner.classList.remove("show");
-
-  window.addEventListener("beforeinstallprompt", (event) => {
+  const hide = () => box.classList.remove("show");
+  window.addEventListener("beforeinstallprompt", event => {
     event.preventDefault();
     deferredPrompt = event;
-    showBanner();
+    show();
   });
-
-  window.addEventListener("appinstalled", () => {
-    deferredPrompt = null;
-    hideBanner();
-  });
-
-  installButton.addEventListener("click", async () => {
+  window.addEventListener("appinstalled", hide);
+  btn.addEventListener("click", async () => {
     if (isIOS) {
-      banner.classList.add("ios");
-      document.getElementById("seatekPwaIosHelp")?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest"
-      });
+      box.classList.add("ios");
       return;
     }
-
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      try {
-        await deferredPrompt.userChoice;
-      } catch (_) {}
+      try { await deferredPrompt.userChoice; } catch (_) {}
       deferredPrompt = null;
-      hideBanner();
+      hide();
       return;
     }
-
-    text.textContent = "Abre el menú de Chrome (⋮) y pulsa «Instalar aplicación» o «Agregar a pantalla principal».";
-    installButton.textContent = "Entendido";
+    message.textContent = "Abre el menú de Chrome (⋮) y toca «Instalar aplicación».";
+    btn.textContent = "Entendido";
   });
-
-  closeButton?.addEventListener("click", hideBanner);
-  laterButton?.addEventListener("click", hideBanner);
-
-  // Mostrar el aviso al abrir desde un navegador normal.
-  if (!standalone) {
-    window.setTimeout(showBanner, 1300);
-  }
-
-  // Registrar el Service Worker. Las PWA requieren HTTPS o localhost.
-  if ("serviceWorker" in navigator &&
-      (location.protocol === "https:" ||
-       location.hostname === "localhost" ||
-       location.hostname === "127.0.0.1")) {
+  close.addEventListener("click", hide);
+  later.addEventListener("click", hide);
+  if (!isStandalone) setTimeout(show, 1200);
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch((error) => {
-        console.warn("No se pudo registrar el Service Worker de SEATEK:", error);
-      });
+      navigator.serviceWorker.register("./sw.js").catch(console.warn);
     });
   }
 })();
