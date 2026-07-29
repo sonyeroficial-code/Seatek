@@ -5999,7 +5999,7 @@ body.scanner-mode #pwaInstallBox{display:none!important}
       <button type="button" class="active" data-view="dashboard"><span class="icon">⌂</span>Inicio</button>
       <button type="button" data-view="requests"><span class="icon">✉</span>Solicitudes <b class="count" id="navRequests">0</b></button>
       <button type="button" data-view="delivery"><span class="icon">＋</span>Nueva entrega</button>
-      <button type="button" data-view="scanner"><span class="icon">⌗</span>Escanear QR</button>
+      <button type="button" data-view="scanner"><span class="icon">⌗</span>Escanear códigos</button>
       <button type="button" data-view="returns"><span class="icon">↩</span>Devoluciones</button>
 
       <div class="nav-label">PERSONAL</div>
@@ -6133,7 +6133,7 @@ body.scanner-mode #pwaInstallBox{display:none!important}
     <button class="scanner-close-btn" id="closeScannerOverlay" type="button" aria-label="Cerrar escáner">×</button>
 
     <div class="scanner-overlay-center" id="cameraPlaceholder">
-      <p class="scanner-main-text">Escanea un QR con tu cámara</p>
+      <p class="scanner-main-text">Escanea un QR o código de barras con tu cámara</p>
       <small id="scanSupport">Escaneando automáticamente...</small>
     </div>
 
@@ -6147,7 +6147,7 @@ body.scanner-mode #pwaInstallBox{display:none!important}
         <span class="scanner-upload-icon">⌗</span>
         <div>
           <strong>Subir una imagen</strong>
-          <small>Leer un código QR desde galería</small>
+          <small>Leer un QR o código de barras desde galería</small>
         </div>
       </label>
       <input class="hidden" id="qrImage" type="file" accept="image/*">
@@ -6189,7 +6189,7 @@ body.scanner-mode #pwaInstallBox{display:none!important}
       </div>
 
       <div class="toolbar warehouse-toolbar">
-        <input id="inventorySearch" placeholder="Buscar por nombre, código, serie o QR...">
+        <input id="inventorySearch" placeholder="Buscar por nombre, código, serie, QR o barras...">
         <select id="inventoryFilter" aria-label="Filtrar almacén">
           <option value="all">Todos los estados</option>
           <option value="available">Disponibles</option>
@@ -6488,7 +6488,7 @@ body.scanner-mode #pwaInstallBox{display:none!important}
 
 <nav class="mobile-nav" id="mobileNav">
   <button class="active" data-view="dashboard" type="button"><span>⌂</span><small>Inicio</small></button>
-  <button data-view="scanner" type="button"><span class="scan-main">⌗</span><small>QR</small></button>
+  <button data-view="scanner" type="button"><span class="scan-main">⌗</span><small>Escáner</small></button>
   <button data-view="delivery" type="button"><span>＋</span><small>Entregar</small></button>
   <button data-view="inventory" type="button"><span>▤</span><small>Almacén</small></button>
   <button data-view="register" type="button" id="mobileNewItemBtn"><span>⊞</span><small>Registrar</small></button>
@@ -6579,7 +6579,7 @@ body.scanner-mode #pwaInstallBox{display:none!important}
       <span class="associate-upload-icon">⌗</span>
       <div>
         <strong>Subir una imagen</strong>
-        <small>Leer un código QR desde galería</small>
+        <small>Leer un QR o código de barras desde galería</small>
       </div>
     </label>
   </div>
@@ -6608,10 +6608,42 @@ body.scanner-mode #pwaInstallBox{display:none!important}
   <div class="modal-actions"><button class="btn ghost" type="button" data-close="stockModal">Cancelar</button><button class="btn primary" type="submit">Guardar ajuste</button></div>
 </form></div>
 
-<div class="modal-bg" id="qrModal"><div class="modal" style="width:min(470px,100%)">
-  <div class="modal-head"><div><h3>Etiqueta QR</h3><p>Imprime y pega esta etiqueta en la herramienta.</p></div><button type="button" data-close="qrModal">×</button></div>
-  <div class="qr-area"><div style="font-size:11px;letter-spacing:2px;font-weight:950;color:#176044">TOOLCONTROL</div><canvas id="qrCanvas" width="260" height="260"></canvas><h2 id="qrName"></h2><b id="qrCode"></b><span id="qrSerial"></span></div>
-  <div class="modal-actions"><button class="btn ghost" type="button" data-close="qrModal">Cerrar</button><button class="btn primary" type="button" id="printQr">Imprimir</button></div>
+<div class="modal-bg" id="qrModal"><div class="modal dual-code-modal" style="width:min(470px,100%)">
+  <div class="modal-head"><div><h3>Etiqueta de identificación</h3><p>Selecciona el tipo de código que deseas visualizar.</p></div><button type="button" data-close="qrModal" aria-label="Cerrar">×</button></div>
+
+  <div class="dual-code-tabs" role="tablist" aria-label="Tipo de código">
+    <button class="dual-code-tab" id="showQrTab" type="button" role="tab" aria-selected="false" aria-controls="qrCodePanel" data-code-view="qr" tabindex="-1">
+      <span class="dual-code-tab-icon" aria-hidden="true">▦</span>
+      <span>Código QR</span>
+    </button>
+    <button class="dual-code-tab active" id="showBarcodeTab" type="button" role="tab" aria-selected="true" aria-controls="barcodeCodePanel" data-code-view="barcode">
+      <span class="dual-code-tab-icon barcode-icon" aria-hidden="true">▥</span>
+      <span>Código de barras</span>
+    </button>
+  </div>
+
+  <div class="qr-area dual-code-label" data-active-view="qr">
+    <div class="dual-code-brand">TOOLCONTROL · SEATEK</div>
+    <section class="label-qr-section dual-code-panel" id="qrCodePanel" role="tabpanel" aria-labelledby="showQrTab" hidden>
+      <div class="dual-code-type">CÓDIGO QR</div>
+      <canvas id="qrCanvas" width="260" height="260"></canvas>
+      <h2 id="qrName"></h2>
+      <b id="qrCode"></b>
+      <span id="qrSerial"></span>
+      <small class="dual-code-help">Al escanear abre la ficha pública del producto.</small>
+    </section>
+    <section class="barcode-block dual-code-panel active" id="barcodeCodePanel" role="tabpanel" aria-labelledby="showBarcodeTab">
+      <div class="dual-code-type">CÓDIGO DE BARRAS · CODE 128</div>
+      <svg id="barcodeSvg" role="img" aria-label="Código de barras de la herramienta" preserveAspectRatio="xMidYMid meet"></svg>
+      <b id="barcodeText"></b>
+      <span>Escanéalo para buscar la herramienta por su código interno.</span>
+    </section>
+  </div>
+  <div class="modal-actions dual-code-actions">
+    <button class="btn ghost" type="button" data-close="qrModal">Cerrar</button>
+    <button class="btn primary" type="button" id="printSelectedCode">Imprimir barras</button>
+  </div>
+  <button class="dual-code-print-both" type="button" id="printQr">Imprimir QR y barras juntos</button>
 </div></div>
 
 <div class="modal-bg" id="returnModal"><form class="modal" id="returnForm">
@@ -8255,7 +8287,32 @@ function unlockWorkerQrBackground(){
  document.body.style.removeProperty("width");
  window.scrollTo(0,workerQrLockedScrollY);
 }
-function openModal(id){$("#"+id).classList.add("open");if(id==="workerQrModal")lockWorkerQrBackground();if(id==="itemModal"){document.body.classList.add("item-modal-open");setMobileRegisterActive(true)}if(id==="returnModal")document.body.classList.add("return-modal-open");if(id==="registerTypeModal")document.body.classList.add("register-type-modal-open")} function closeModal(id){$("#"+id).classList.remove("open");if(id==="workerQrModal")unlockWorkerQrBackground();if(id==="itemModal"){document.body.classList.remove("item-modal-open");closeAssociateQrOverlay();setMobileRegisterActive(false)}if(id==="returnModal")document.body.classList.remove("return-modal-open");if(id==="registerTypeModal")document.body.classList.remove("register-type-modal-open")}
+let qrModalLockedScrollY=0;
+function lockQrModalBackground(){
+ if(document.body.classList.contains("qr-modal-open"))return;
+ qrModalLockedScrollY=window.scrollY||document.documentElement.scrollTop||0;
+ document.body.classList.add("qr-modal-open");
+ document.body.style.position="fixed";
+ document.body.style.top=`-${qrModalLockedScrollY}px`;
+ document.body.style.left="0";
+ document.body.style.right="0";
+ document.body.style.width="100%";
+ document.body.style.overflow="hidden";
+}
+function unlockQrModalBackground(){
+ if(!document.body.classList.contains("qr-modal-open"))return;
+ document.body.classList.remove("qr-modal-open");
+ if(!document.body.classList.contains("worker-qr-modal-open")){
+  document.body.style.removeProperty("position");
+  document.body.style.removeProperty("top");
+  document.body.style.removeProperty("left");
+  document.body.style.removeProperty("right");
+  document.body.style.removeProperty("width");
+  document.body.style.removeProperty("overflow");
+  window.scrollTo(0,qrModalLockedScrollY);
+ }
+}
+function openModal(id){$("#"+id).classList.add("open");if(id==="workerQrModal")lockWorkerQrBackground();if(id==="qrModal")lockQrModalBackground();if(id==="itemModal"){document.body.classList.add("item-modal-open");setMobileRegisterActive(true)}if(id==="returnModal")document.body.classList.add("return-modal-open");if(id==="registerTypeModal")document.body.classList.add("register-type-modal-open")} function closeModal(id){$("#"+id).classList.remove("open");if(id==="workerQrModal")unlockWorkerQrBackground();if(id==="qrModal")unlockQrModalBackground();if(id==="itemModal"){document.body.classList.remove("item-modal-open");closeAssociateQrOverlay();setMobileRegisterActive(false)}if(id==="returnModal")document.body.classList.remove("return-modal-open");if(id==="registerTypeModal")document.body.classList.remove("register-type-modal-open")}
 function empty(text){return `<div class="empty"><div class="eicon">✓</div><h3>Sin resultados</h3><p>${text}</p></div>`}
 function workerDetailEmpty(text){return `<div class="worker-empty-plain"><h3>Sin resultados</h3><p>${text}</p></div>`}
 function badgeLoan(l){if(l.priority==="Crítica")return `<span class="badge red">Crítica</span>`;if(l.priority==="Importante")return `<span class="badge amber">Importante</span>`;return `<span class="badge blue">En uso</span>`}
@@ -8265,6 +8322,7 @@ function closeAllFloatingUi(){
   stopItemQrScanner();
   $$(".modal-bg.open").forEach(m=>m.classList.remove("open"));
   unlockWorkerQrBackground();
+  unlockQrModalBackground();
   document.body.classList.remove("item-modal-open");
   setMobileRegisterActive(false);
 }
@@ -9711,6 +9769,7 @@ function closeAssociateQrOverlay(cancelled=false){
   }
 }
 async function startItemQrScanner(){
+  prepareScanFeedback();
   const overlay=$("#associateQrOverlay");
   if(overlay)overlay.classList.add("open");
   document.body.classList.add("associate-scanner-mode");
@@ -9742,7 +9801,7 @@ async function startItemQrScanner(){
   stopItemQrScanner();
 
   try{
-    itemQrDetector=new BarcodeDetector({formats:["qr_code"]});
+    itemQrDetector=await createToolBarcodeDetector();
 
     try{
       itemQrStream=await navigator.mediaDevices.getUserMedia({
@@ -9787,8 +9846,8 @@ async function itemQrScanTick(){
       $("#itemQrValue").value=codes[0].rawValue;
       refreshItemQrSummary();
       closeAssociateQrOverlay(false);
-      if(navigator.vibrate)navigator.vibrate(100);
-      toast("QR detectado y asociado automáticamente.");
+      playScanFeedback();
+      toast("Código detectado y asociado automáticamente.");
       return;
     }
   }catch(error){}
@@ -9817,7 +9876,7 @@ async function scanExistingQrImage(file){
   }
   try{
     const bitmap=await createImageBitmap(file);
-    const imageDetector=new BarcodeDetector({formats:["qr_code"]});
+    const imageDetector=await createToolBarcodeDetector();
     const codes=await imageDetector.detect(bitmap);
     if(!codes.length){
       toast("No se encontró un código QR en la imagen.");
@@ -9826,8 +9885,8 @@ async function scanExistingQrImage(file){
     $("#itemQrValue").value=codes[0].rawValue;
     refreshItemQrSummary();
     closeAssociateQrOverlay(false);
-    if(navigator.vibrate)navigator.vibrate(100);
-    toast("QR leído y asociado automáticamente.");
+    playScanFeedback();
+    toast("Código leído y asociado automáticamente.");
   }catch(error){
     toast("No se pudo analizar la imagen.");
   }finally{
@@ -10080,7 +10139,45 @@ function renderScanDetail(item,raw){
    </div>`;
 }
 
+let scanAudioContext=null;
+function prepareScanFeedback(){
+  try{
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtx)return;
+    if(!scanAudioContext)scanAudioContext=new AudioCtx();
+    if(scanAudioContext.state==="suspended")scanAudioContext.resume().catch(()=>{});
+  }catch(_){ }
+}
+function playScanFeedback(){
+  /* Beep corto generado por la propia app, sin archivos de audio externos. */
+  try{
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(AudioCtx){
+      if(!scanAudioContext)scanAudioContext=new AudioCtx();
+      const ctx=scanAudioContext;
+      const play=()=>{
+        const now=ctx.currentTime;
+        const oscillator=ctx.createOscillator();
+        const gain=ctx.createGain();
+        oscillator.type="sine";
+        oscillator.frequency.setValueAtTime(980,now);
+        gain.gain.setValueAtTime(0.0001,now);
+        gain.gain.exponentialRampToValueAtTime(0.22,now+0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0001,now+0.12);
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+        oscillator.start(now);
+        oscillator.stop(now+0.13);
+      };
+      if(ctx.state==="suspended")ctx.resume().then(play).catch(()=>{});
+      else play();
+    }
+  }catch(_){ }
+  try{if(navigator.vibrate)navigator.vibrate(90)}catch(_){ }
+}
+
 function showScan(raw){
+ playScanFeedback();
  if(itemQrAssociationMode){
    stopScanner();
    $("#itemQrValue").value=String(raw||"").trim();
@@ -10091,8 +10188,7 @@ function showScan(raw){
    refreshItemQrSummary();
    go(itemQrReturnView||"register");
    openModal("itemModal");
-   if(navigator.vibrate)navigator.vibrate(100);
-   toast("QR detectado y asociado correctamente");
+   toast("Código detectado y asociado correctamente");
    return;
  }
  const item=findItem(raw);
@@ -10100,10 +10196,9 @@ function showScan(raw){
  renderScanDetail(item,raw);
  go("scan-detail");
  if(item){
-   if(navigator.vibrate)navigator.vibrate(100);
    toast("Herramienta identificada");
  }else{
-   toast("QR no registrado");
+   toast("Código no registrado");
  }
 }
 function newItemFromLastScan(){
@@ -10111,6 +10206,7 @@ function newItemFromLastScan(){
 }
 function newItemFromQr(raw){newItem();$("#qrMode").value="existing";$("#itemQrValue").value=raw;updateItemFields();refreshItemQrSummary();closeModal("itemModal");setTimeout(()=>openModal("itemModal"),0)}
 async function startScanner(){
+ prepareScanFeedback();
  if(scannerStream)return;
 
  const placeholder=$("#cameraPlaceholder");
@@ -10129,12 +10225,12 @@ async function startScanner(){
    return;
  }
  if(!("BarcodeDetector" in window)){
-   if(support)support.textContent="Tu navegador no admite lectura QR automática. Usa una imagen.";
+   if(support)support.textContent="Tu navegador no admite lectura automática de códigos. Usa una imagen.";
    return;
  }
 
  try{
-   detector=new BarcodeDetector({formats:["qr_code"]});
+   detector=await createToolBarcodeDetector();
    scannerStream=await navigator.mediaDevices.getUserMedia({
      video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}},
      audio:false
@@ -10207,7 +10303,7 @@ async function toggleTorch(){
    toast("No se pudo cambiar la linterna.");
  }
 }
-async function scanImage(file){if(!file)return;if(!("BarcodeDetector" in window))return toast("Tu navegador no puede leer QR desde imágenes");try{const b=await createImageBitmap(file),d=new BarcodeDetector({formats:["qr_code"]}),c=await d.detect(b);c.length?showScan(c[0].rawValue):toast("No se encontró un QR")}catch(e){toast("No se pudo analizar la imagen")}}
+async function scanImage(file){if(!file)return;if(!("BarcodeDetector" in window))return toast("Tu navegador no puede leer códigos desde imágenes");try{const b=await createImageBitmap(file),d=await createToolBarcodeDetector(),c=await d.detect(b);c.length?showScan(c[0].rawValue):toast("No se encontró un QR ni código de barras")}catch(e){toast("No se pudo analizar la imagen")}}
 function openMore(){$("#moreSheet").classList.add("open");$("#sheetOverlay").classList.add("open")}function closeMore(){$("#moreSheet").classList.remove("open");$("#sheetOverlay").classList.remove("open")}
 window.go=go;window.resetInventoryViewState=resetInventoryViewState;window.openDashboardInventory=openDashboardInventory;window.beginItemQrAssociation=beginItemQrAssociation;window.cancelItemQrAssociation=cancelItemQrAssociation;window.setWarehouseCategory=setWarehouseCategory;window.openCategoriesView=openCategoriesView;window.openWarehouseCategory=openWarehouseCategory;window.startAssetRegistration=startAssetRegistration;window.requestDeleteCategory=requestDeleteCategory;window.restoreTrashCategory=restoreTrashCategory;window.requestPermanentDeleteCategory=requestPermanentDeleteCategory;window.showQr=showQr;window.editItem=editItem;window.openStock=openStock;window.deliverItem=deliverItem;window.showLoan=showLoan;window.openReturn=openReturn;window.openReturnReport=openReturnReport;window.openExtendLoan=openExtendLoan;window.newItemFromQr=newItemFromQr;window.newItemFromLastScan=newItemFromLastScan;window.requestDeleteItem=requestDeleteItem;window.selectDeliveryWorker=selectDeliveryWorker;window.requestPermanentDelete=requestPermanentDelete;window.restoreTrashItem=restoreTrashItem;window.newWorker=newWorker;window.editWorker=editWorker;window.showWorker=showWorker;
 
@@ -10531,7 +10627,7 @@ $("#extendLoanForm").onsubmit=e=>{
 $("#closeScannerOverlay").onclick=()=>{if(itemQrAssociationMode){cancelItemQrAssociation();return;}go("dashboard")};$("#toggleTorchBtn").onclick=toggleTorch;$("#qrImage").onchange=e=>scanImage(e.target.files[0]);$("#printQr").onclick=()=>window.print();
 $("#inventorySearch").oninput=renderInventory;$("#inventoryFilter").onchange=renderInventory;if($("#trashSearch"))$("#trashSearch").oninput=renderTrash;$("#activeSearch").oninput=renderActive;$("#activeFilter").onchange=renderActive;$("#returnSearch").oninput=renderReturns;$("#stockSearch").oninput=renderStock;$("#stockFilter").onchange=renderStock;
 if($("#resetDemo"))$("#resetDemo").onclick=()=>{if(confirm("¿Restablecer todos los datos de prueba?")){["tc2_items","tc2_loans","tc2_stock","tc2_trash","tc2_workers","tc2_worker_trash","tc2_register_types","tc2_category_trash"].forEach(k=>localStorage.removeItem(k));items=structuredClone(seedItems);loans=structuredClone(seedLoans);stockHistory=structuredClone(seedStock);trashItems=[];workers=structuredClone(seedWorkers);workerTrash=[];customRegisterTypes=[];categoryTrash=[];save();renderAll();toast("Datos restablecidos")}};
-$("#dateChip").textContent=new Intl.DateTimeFormat("es-PE",{weekday:"long",day:"2-digit",month:"long"}).format(new Date());$("#scanSupport").textContent=("BarcodeDetector" in window)?"Lector QR compatible. Para usar cámara abre la página con HTTPS o localhost.":"El lector automático no está disponible en este navegador; usa la búsqueda manual.";
+$("#dateChip").textContent=new Intl.DateTimeFormat("es-PE",{weekday:"long",day:"2-digit",month:"long"}).format(new Date());$("#scanSupport").textContent=("BarcodeDetector" in window)?"Lector de QR y códigos de barras compatible. Para usar la cámara abre la página con HTTPS o localhost.":"El lector automático no está disponible en este navegador; usa la búsqueda manual.";
 renderAll();
 </script>
 
@@ -16144,6 +16240,283 @@ body.register-type-modal-open .sheet-overlay{
   }
 }
 </style>
+
+
+<style id="v-dual-qr-barcode">
+/* ===== SELECTOR QR / CÓDIGO DE BARRAS CODE 128 ===== */
+#qrModal{overscroll-behavior:contain;touch-action:none}
+#qrModal .dual-code-modal{
+  width:min(520px,100%)!important;
+  max-height:min(92dvh,780px)!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain!important;
+  touch-action:pan-y!important;
+  scrollbar-width:none;
+}
+#qrModal .dual-code-modal::-webkit-scrollbar{display:none}
+#qrModal .modal-head{margin-bottom:13px!important}
+#qrModal .dual-code-tabs{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  padding:5px;
+  margin-bottom:12px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:16px;
+  background:rgba(1,10,16,.38);
+}
+#qrModal .dual-code-tab{
+  min-width:0;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:10px 8px;
+  border:0;
+  border-radius:12px;
+  background:transparent;
+  color:#8fa2ac;
+  font:inherit;
+  font-size:12px;
+  font-weight:850;
+  cursor:pointer;
+  transition:background .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+#qrModal .dual-code-tab:active{transform:scale(.985)}
+#qrModal .dual-code-tab.active{
+  color:#062219;
+  background:linear-gradient(135deg,#42e7b2,#7bf2c9);
+  box-shadow:0 8px 22px rgba(66,231,178,.2);
+}
+#qrModal .dual-code-tab-icon{font-size:20px;line-height:1}
+#qrModal .barcode-icon{font-size:22px;transform:scaleX(1.15)}
+#qrModal .dual-code-label{
+  min-height:405px;
+  padding:17px 16px 15px!important;
+  display:flex!important;
+  flex-direction:column;
+  justify-content:center;
+}
+#qrModal .dual-code-brand{
+  margin-bottom:5px;
+  font-size:9.5px!important;
+  letter-spacing:1.65px!important;
+  font-weight:950!important;
+  color:#176044!important;
+  text-align:center!important;
+}
+#qrModal .dual-code-type{font-size:8.5px;line-height:1.2;letter-spacing:1.25px;font-weight:950;color:#5b6c73;text-align:center}
+#qrModal .dual-code-panel{display:none;animation:dualCodeIn .2s ease both}
+#qrModal .dual-code-panel.active{display:block}
+#qrModal .dual-code-panel[hidden]{display:none!important}
+@keyframes dualCodeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+#qrModal .label-qr-section{text-align:center}
+#qrModal .label-qr-section #qrCanvas{display:block;margin:8px auto 0}
+#qrModal .label-qr-section h2{margin:9px 0 2px!important}
+#qrModal .label-qr-section #qrCode{font-size:17px}
+#qrModal .dual-code-help{display:block;margin-top:12px;color:#6c7b83;font-size:10px;line-height:1.4}
+#qrModal .barcode-block{text-align:center;min-width:0;padding:42px 0 28px}
+#qrModal #barcodeSvg{display:block;width:100%;max-width:390px;height:145px;margin:12px auto 2px;background:#fff;overflow:visible}
+#qrModal #barcodeText{display:block!important;margin-top:2px!important;color:#071b14!important;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace!important;font-size:18px!important;letter-spacing:2.4px!important;overflow-wrap:anywhere}
+#qrModal .barcode-block>span{font-size:10.5px!important;line-height:1.4!important;color:#64747b!important;margin-top:10px!important}
+#qrModal .dual-code-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;margin-top:13px!important}
+#qrModal .dual-code-actions .btn{width:100%!important;margin:0!important}
+#qrModal .dual-code-print-both{
+  width:100%;
+  margin-top:8px;
+  padding:7px 10px;
+  border:0;
+  background:transparent;
+  color:#78909b;
+  font:inherit;
+  font-size:10.5px;
+  font-weight:750;
+  cursor:pointer;
+}
+#qrModal .dual-code-print-both:active{color:#42e7b2}
+body.qr-modal-open{overscroll-behavior:none!important}
+@media(max-width:430px){
+  #qrModal{padding:10px!important;align-items:center!important}
+  #qrModal .dual-code-modal{width:min(382px,100%)!important;max-height:calc(100dvh - 20px)!important;padding:16px!important;border-radius:22px!important}
+  #qrModal .dual-code-tab{min-height:46px;font-size:11px;gap:6px}
+  #qrModal .dual-code-label{min-height:390px;padding:14px 12px!important}
+  #qrModal #qrCanvas{width:220px!important;height:220px!important}
+  #qrModal .barcode-block{padding:50px 0 35px}
+  #qrModal #barcodeSvg{height:132px!important}
+  #qrModal .dual-code-actions .btn{min-height:48px!important;font-size:11px!important;padding:9px 7px!important}
+}
+@media(max-width:360px){
+  #qrModal .dual-code-tab{font-size:10px}
+  #qrModal #qrCanvas{width:196px!important;height:196px!important}
+  #qrModal .dual-code-label{min-height:360px}
+}
+@media print{
+  body.print-tool-label{background:#fff!important}
+  body.print-tool-label #qrModal{display:block!important;position:static!important;padding:0!important;background:#fff!important}
+  body.print-tool-label #qrModal .modal{display:block!important;position:static!important;width:100%!important;max-width:none!important;max-height:none!important;padding:0!important;border:0!important;box-shadow:none!important;background:#fff!important;overflow:visible!important}
+  body.print-tool-label #qrModal .modal-head,
+  body.print-tool-label #qrModal .dual-code-tabs,
+  body.print-tool-label #qrModal .modal-actions,
+  body.print-tool-label #qrModal .dual-code-print-both{display:none!important}
+  body.print-tool-label #qrModal .qr-area{position:absolute!important;left:0!important;top:0!important;width:100%!important;min-height:0!important;padding:12mm!important;border-radius:0!important}
+  body.print-tool-label #qrModal .dual-code-panel{animation:none!important}
+  body.print-tool-label.print-qr-only .label-qr-section{display:block!important}
+  body.print-tool-label.print-qr-only .barcode-block{display:none!important}
+  body.print-tool-label.print-barcode-only .label-qr-section{display:none!important}
+  body.print-tool-label.print-barcode-only .barcode-block{display:block!important;padding-top:9mm!important}
+  body.print-tool-label.print-barcode-only #barcodeSvg{height:38mm!important;max-width:150mm!important}
+  body.print-tool-label.print-both .label-qr-section,
+  body.print-tool-label.print-both .barcode-block{display:block!important}
+  body.print-tool-label.print-both .barcode-block{padding:5mm 0 0!important}
+  body.print-tool-label.print-both #qrCanvas{width:48mm!important;height:48mm!important}
+  body.print-tool-label.print-both #barcodeSvg{height:31mm!important;max-width:140mm!important}
+}
+</style>
+<script id="v-dual-qr-barcode-script">
+/* Detector adaptativo: utiliza únicamente los formatos que el navegador declara compatibles. */
+async function createToolBarcodeDetector(){
+  const wanted=["qr_code","code_128","code_39","ean_13","ean_8","upc_a","upc_e"];
+  let formats=wanted.slice();
+  try{
+    if(typeof BarcodeDetector.getSupportedFormats==="function"){
+      const supported=await BarcodeDetector.getSupportedFormats();
+      formats=wanted.filter(format=>supported.includes(format));
+    }
+  }catch(_){ }
+  if(!formats.length)formats=["qr_code"];
+  return new BarcodeDetector({formats});
+}
+
+/* Tabla oficial de patrones Code 128. Se usa el subconjunto B para códigos alfanuméricos. */
+const TOOL_CODE128_PATTERNS=[
+"212222","222122","222221","121223","121322","131222","122213","122312","132212","221213","221312","231212","112232","122132","122231","113222","123122","123221","223211","221132","221231","213212","223112","312131","311222","321122","321221","312212","322112","322211","212123","212321","232121","111323","131123","131321","112313","132113","132311","211313","231113","231311","112133","112331","132131","113123","113321","133121","313121","211331","231131","213113","213311","213131","311123","311321","331121","312113","312311","332111","314111","221411","431111","111224","111422","121124","121421","141122","141221","112214","112412","122114","122411","142112","142211","241211","221114","413111","241112","134111","111242","121142","121241","114212","124112","124211","411212","421112","421211","212141","214121","412121","111143","111341","131141","114113","114311","411113","411311","113141","114131","311141","411131","211412","211214","211232","2331112"
+];
+function normalizeCode128Text(value){
+  let text=String(value??"").trim();
+  if(!text)text="SIN-CODIGO";
+  text=Array.from(text).map(ch=>{
+    const n=ch.charCodeAt(0);
+    return n>=32&&n<=126?ch:"-";
+  }).join("");
+  return text.slice(0,48);
+}
+function code128BValues(value){
+  const text=normalizeCode128Text(value);
+  const data=Array.from(text).map(ch=>ch.charCodeAt(0)-32);
+  let checksum=104;
+  data.forEach((code,index)=>{checksum+=code*(index+1)});
+  checksum%=103;
+  return {text,values:[104,...data,checksum,106]};
+}
+function drawCode128(svg,value){
+  if(!svg)return;
+  const result=code128BValues(value);
+  const quiet=10;
+  const patterns=result.values.map(v=>TOOL_CODE128_PATTERNS[v]);
+  const modules=patterns.reduce((sum,pattern)=>sum+Array.from(pattern).reduce((a,n)=>a+Number(n),0),0);
+  const total=modules+quiet*2;
+  const height=76;
+  svg.setAttribute("viewBox",`0 0 ${total} ${height}`);
+  svg.setAttribute("shape-rendering","crispEdges");
+  svg.setAttribute("aria-label",`Código de barras ${result.text}`);
+  while(svg.firstChild)svg.removeChild(svg.firstChild);
+  const ns="http://www.w3.org/2000/svg";
+  const background=document.createElementNS(ns,"rect");
+  background.setAttribute("x","0");background.setAttribute("y","0");background.setAttribute("width",String(total));background.setAttribute("height",String(height));background.setAttribute("fill","#fff");
+  svg.appendChild(background);
+  let x=quiet;
+  patterns.forEach(pattern=>{
+    let bar=true;
+    for(const widthChar of pattern){
+      const width=Number(widthChar);
+      if(bar){
+        const rect=document.createElementNS(ns,"rect");
+        rect.setAttribute("x",String(x));rect.setAttribute("y","2");rect.setAttribute("width",String(width));rect.setAttribute("height","70");rect.setAttribute("fill","#071b14");
+        svg.appendChild(rect);
+      }
+      x+=width;
+      bar=!bar;
+    }
+  });
+  return result.text;
+}
+
+(function installDualCodes(){
+  let activeCodeView="barcode";
+
+  function setCodeView(view,focusTab=false){
+    activeCodeView=view==="barcode"?"barcode":"qr";
+    const qrPanel=document.getElementById("qrCodePanel");
+    const barcodePanel=document.getElementById("barcodeCodePanel");
+    const qrTab=document.getElementById("showQrTab");
+    const barcodeTab=document.getElementById("showBarcodeTab");
+    const printSelected=document.getElementById("printSelectedCode");
+    const isQr=activeCodeView==="qr";
+
+    if(qrPanel){qrPanel.hidden=!isQr;qrPanel.classList.toggle("active",isQr)}
+    if(barcodePanel){barcodePanel.hidden=isQr;barcodePanel.classList.toggle("active",!isQr)}
+    if(qrTab){qrTab.classList.toggle("active",isQr);qrTab.setAttribute("aria-selected",String(isQr));qrTab.tabIndex=isQr?0:-1}
+    if(barcodeTab){barcodeTab.classList.toggle("active",!isQr);barcodeTab.setAttribute("aria-selected",String(!isQr));barcodeTab.tabIndex=!isQr?0:-1}
+    if(printSelected)printSelected.textContent=isQr?"Imprimir QR":"Imprimir barras";
+    if(focusTab)(isQr?qrTab:barcodeTab)?.focus();
+  }
+
+  const originalShowQr=window.showQr;
+  if(typeof originalShowQr==="function"){
+    const enhancedShowQr=function(id){
+      originalShowQr(id);
+      const item=(typeof items!=="undefined"?items:[]).find(row=>row.id===id);
+      if(!item)return;
+      const barcodeValue=normalizeCode128Text(item.code||item.publicId||item.id);
+      drawCode128(document.getElementById("barcodeSvg"),barcodeValue);
+      const barcodeText=document.getElementById("barcodeText");
+      if(barcodeText)barcodeText.textContent=barcodeValue;
+      setCodeView("barcode");
+      const modal=document.querySelector("#qrModal .dual-code-modal");
+      if(modal)modal.scrollTop=0;
+    };
+    window.showQr=enhancedShowQr;
+    try{showQr=enhancedShowQr}catch(_){ }
+  }
+
+  function clearPrintMode(){
+    document.body.classList.remove("print-tool-label","print-qr-only","print-barcode-only","print-both");
+  }
+  function printToolCode(mode){
+    clearPrintMode();
+    document.body.classList.add("print-tool-label",mode);
+    window.print();
+    setTimeout(clearPrintMode,1500);
+  }
+  window.addEventListener("afterprint",clearPrintMode);
+
+  document.getElementById("showQrTab")?.addEventListener("click",()=>setCodeView("qr"));
+  document.getElementById("showBarcodeTab")?.addEventListener("click",()=>setCodeView("barcode"));
+  document.querySelector("#qrModal .dual-code-tabs")?.addEventListener("keydown",event=>{
+    if(!["ArrowLeft","ArrowRight"].includes(event.key))return;
+    event.preventDefault();
+    setCodeView(activeCodeView==="qr"?"barcode":"qr",true);
+  });
+
+  const printBoth=document.getElementById("printQr");
+  const printSelected=document.getElementById("printSelectedCode");
+  if(printBoth)printBoth.onclick=()=>printToolCode("print-both");
+  if(printSelected)printSelected.onclick=()=>printToolCode(activeCodeView==="qr"?"print-qr-only":"print-barcode-only");
+
+  const qrModal=document.getElementById("qrModal");
+  if(qrModal){
+    qrModal.addEventListener("touchmove",event=>{
+      if(event.target===qrModal)event.preventDefault();
+    },{passive:false});
+  }
+
+  const support=document.getElementById("scanSupport");
+  if(support && "BarcodeDetector" in window){
+    support.textContent="Lector de QR y códigos de barras compatible. Para usar la cámara abre la página con HTTPS o localhost.";
+  }
+})();
+</script>
 
 </body>
 </html>
