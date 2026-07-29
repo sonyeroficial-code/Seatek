@@ -4907,7 +4907,16 @@ body.worker-mode>.app{display:none!important}
   font-weight:900;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;
 }
 .admin-logout-btn:hover{background:rgba(255,79,112,.18);border-color:rgba(255,104,128,.46)}
-.sidebar-logout-wrap{margin-top:auto;padding:12px 10px 15px;border-top:1px solid var(--line)}
+.sidebar-logout-wrap{margin-top:auto;padding:12px 10px 15px;border-top:1px solid var(--line);display:grid;gap:8px}
+.sidebar-update{width:100%;min-height:50px;padding:8px 10px;border:1px solid rgba(44,224,163,.24);border-radius:14px;background:rgba(44,224,163,.075);color:#e8fff7;font:inherit;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;transition:.18s ease}
+.sidebar-update:hover,.sidebar-update.has-update{background:rgba(44,224,163,.14);border-color:rgba(44,224,163,.46)}
+.sidebar-update:disabled{opacity:.65;cursor:wait}
+.sidebar-update-icon{width:31px;height:31px;flex:0 0 31px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,var(--mint),var(--mint2));color:#05251a;font-size:20px;font-weight:950}
+.sidebar-update.is-checking .sidebar-update-icon{animation:app-update-spin .85s linear infinite}
+.sidebar-update-copy{min-width:0;display:grid;gap:2px}
+.sidebar-update-copy b{color:#f3fffb;font-size:11.5px;line-height:1.15}
+.sidebar-update-copy small{color:#91afa4;font-size:9.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@keyframes app-update-spin{to{transform:rotate(360deg)}}
 .sidebar-logout{width:100%;min-height:44px;border:1px solid rgba(255,104,128,.25);border-radius:14px;
   background:rgba(255,79,112,.08);color:#ffd8df;font:inherit;font-size:12px;font-weight:900;cursor:pointer}
 .request-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
@@ -5531,6 +5540,7 @@ label,
 </style>
 
 
+<meta name="app-content-hash" content="8b1260f4c70b017840d6013c1b67bba30bb86d8b5df0f8dcd406b6036f024f4b">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
@@ -6018,7 +6028,13 @@ body.scanner-mode #pwaInstallBox{display:none!important}
       <button type="button" data-view="trash"><span class="icon">♲</span>Papelera <b class="count" id="navTrash">0</b></button>
       <button type="button" data-view="excel"><span class="icon">⇩</span>Exportar Excel</button>
     </nav>
-    <div class="sidebar-logout-wrap"><button class="sidebar-logout" id="adminSidebarLogout" type="button">⎋ Cerrar sesión</button></div>
+    <div class="sidebar-logout-wrap">
+      <button class="sidebar-update" id="appUpdateBtn" type="button" aria-label="Buscar y aplicar actualizaciones">
+        <span class="sidebar-update-icon" aria-hidden="true">↻</span>
+        <span class="sidebar-update-copy"><b>Actualizar aplicación</b><small id="appUpdateStatus">Buscar nueva versión</small></span>
+      </button>
+      <button class="sidebar-logout" id="adminSidebarLogout" type="button">⎋ Cerrar sesión</button>
+    </div>
   </aside>
   <div class="overlay" id="overlay"></div>
 
@@ -15788,53 +15804,172 @@ body.worker-qr-modal-open{overflow:hidden!important;overscroll-behavior:none!imp
 </div>
 <script id="pwa-seatek-script">
 (() => {
+  const embeddedBuildHash = document.querySelector('meta[name="app-content-hash"]')?.content || "";
   let deferredPrompt = null;
+  let swRegistration = null;
+  let updateCheckPromise = null;
+  let applyingUpdate = false;
+
   const box = document.getElementById("pwaInstallBox");
   const btn = document.getElementById("pwaInstallBtn");
   const close = document.getElementById("pwaCloseBtn");
   const later = document.getElementById("pwaLaterBtn");
   const message = document.getElementById("pwaMessage");
+  const sidebarUpdateBtn = document.getElementById("appUpdateBtn");
+  const sidebarUpdateStatus = document.getElementById("appUpdateStatus");
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   const ua = navigator.userAgent || "";
   const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const show = () => {
-    if (isStandalone) return;
+  const canUseServiceWorker = "serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1");
+
+  function showInstall(){
+    if (isStandalone || !box) return;
     if (isIOS) {
       box.classList.add("ios");
-      btn.textContent = "Ver cómo instalar";
+      if (btn) btn.textContent = "Ver cómo instalar";
     }
     box.classList.add("show");
-  };
-  const hide = () => box.classList.remove("show");
+  }
+
+  function hideInstall(){
+    box?.classList.remove("show");
+  }
+
   window.addEventListener("beforeinstallprompt", event => {
     event.preventDefault();
     deferredPrompt = event;
-    show();
+    showInstall();
   });
-  window.addEventListener("appinstalled", hide);
-  btn.addEventListener("click", async () => {
+
+  window.addEventListener("appinstalled", hideInstall);
+
+  btn?.addEventListener("click", async () => {
     if (isIOS) {
-      box.classList.add("ios");
+      box?.classList.add("ios");
       return;
     }
     if (deferredPrompt) {
       deferredPrompt.prompt();
       try { await deferredPrompt.userChoice; } catch (_) {}
       deferredPrompt = null;
-      hide();
+      hideInstall();
       return;
     }
-    message.textContent = "Abre el menú de Chrome (⋮) y toca «Instalar aplicación».";
+    if (message) message.textContent = "Abre el menú de Chrome (⋮) y toca «Instalar aplicación».";
     btn.textContent = "Entendido";
   });
-  close.addEventListener("click", hide);
-  later.addEventListener("click", hide);
-  if (!isStandalone) setTimeout(show, 1200);
-  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(console.warn);
+
+  close?.addEventListener("click", hideInstall);
+  later?.addEventListener("click", hideInstall);
+  if (!isStandalone) setTimeout(showInstall, 1200);
+
+  function setUpdateButtonState(state, text){
+    if (!sidebarUpdateBtn || !sidebarUpdateStatus) return;
+    sidebarUpdateBtn.classList.toggle("is-checking", state === "checking");
+    sidebarUpdateBtn.classList.toggle("has-update", state === "available");
+    sidebarUpdateBtn.disabled = state === "checking" || state === "applying";
+    sidebarUpdateStatus.textContent = text;
+  }
+
+  function resetUpdateButtonLater(){
+    window.setTimeout(() => {
+      if (!applyingUpdate) setUpdateButtonState("ready", "Buscar nueva versión");
+    }, 2600);
+  }
+
+  function normalizeBuildSource(source){
+    return String(source || "").replace(/(<meta\s+name=["']app-content-hash["']\s+content=["'])[^"']*(["']\s*\/?>)/i, "$1$2");
+  }
+
+  async function hashText(text){
+    if (window.crypto?.subtle && window.TextEncoder) {
+      const bytes = new TextEncoder().encode(text);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
+    }
+    let hash = 2166136261;
+    for (let i = 0; i < text.length; i++) {
+      hash ^= text.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    return `fnv-${(hash >>> 0).toString(16)}`;
+  }
+
+  async function fetchRemoteBuildHash(){
+    const url = new URL("./index.html", location.href);
+    url.searchParams.set("__seatek_manual_update", Date.now().toString());
+    const response = await fetch(url.href, {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache", "Pragma": "no-cache" }
+    });
+    if (!response.ok) throw new Error(`No se pudo comprobar la actualización (${response.status})`);
+    const source = await response.text();
+    return hashText(normalizeBuildSource(source));
+  }
+
+  async function clearAppCaches(){
+    if (!("caches" in window)) return;
+    const keys = await caches.keys();
+    await Promise.all(keys.map(key => caches.delete(key)));
+  }
+
+  async function applyLatestVersion(remoteHash = ""){
+    if (applyingUpdate) return;
+    applyingUpdate = true;
+    setUpdateButtonState("applying", "Aplicando actualización…");
+    try {
+      await clearAppCaches();
+      if (swRegistration?.waiting) swRegistration.waiting.postMessage({ type: "SKIP_WAITING" });
+      await swRegistration?.update().catch(() => {});
+    } finally {
+      const freshUrl = new URL("./index.html", location.href);
+      freshUrl.searchParams.set("app_refresh", Date.now().toString());
+      if (remoteHash) freshUrl.searchParams.set("version", remoteHash.slice(0, 12));
+      location.replace(freshUrl.href);
+    }
+  }
+
+  async function checkForAppUpdate(){
+    if (updateCheckPromise) return updateCheckPromise;
+    updateCheckPromise = (async () => {
+      setUpdateButtonState("checking", "Buscando actualización…");
+      try {
+        if (!navigator.onLine) throw new Error("offline");
+        if (swRegistration) await swRegistration.update().catch(() => {});
+        const remoteHash = await fetchRemoteBuildHash();
+        if (remoteHash && embeddedBuildHash && remoteHash === embeddedBuildHash) {
+          setUpdateButtonState("ready", "La aplicación está actualizada");
+          resetUpdateButtonLater();
+          return false;
+        }
+        setUpdateButtonState("available", "Nueva versión encontrada");
+        await applyLatestVersion(remoteHash);
+        return true;
+      } catch (error) {
+        console.warn("Actualización manual:", error);
+        setUpdateButtonState("ready", navigator.onLine ? "No se pudo comprobar" : "Sin conexión");
+        resetUpdateButtonLater();
+        return false;
+      } finally {
+        updateCheckPromise = null;
+      }
+    })();
+    return updateCheckPromise;
+  }
+
+  sidebarUpdateBtn?.addEventListener("click", checkForAppUpdate);
+
+  if (canUseServiceWorker) {
+    window.addEventListener("load", async () => {
+      try {
+        swRegistration = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+      } catch (error) {
+        console.warn("Service Worker:", error);
+      }
     });
   }
+
+  window.SEATEK_UPDATE = { check: checkForAppUpdate, apply: applyLatestVersion };
 })();
 </script>
 

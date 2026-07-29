@@ -1,10 +1,10 @@
 {
-  "id": "./Index.html",
+  "id": "./index.html",
   "name": "SEATEK Holding S.A.C.",
   "short_name": "SEATEK",
   "description": "Sistema corporativo para control de herramientas, entregas, devoluciones y códigos QR.",
   "lang": "es-PE",
-  "start_url": "./Index.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
