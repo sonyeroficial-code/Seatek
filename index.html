@@ -4489,6 +4489,58 @@ body.sidebar-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;overs
     display:block!important;
   }
 }
+
+
+/* =============================================================
+   OPTIMIZACIÓN DE ALMACÉN PARA MUCHOS REGISTROS
+   - Solo se muestran los productos de la página actual.
+   - El QR real se genera únicamente al presionar "Ver QR".
+   ============================================================= */
+.inventory-pager{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:18px 0 8px;
+  padding:13px 14px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:rgba(13,34,48,.88);
+}
+.inventory-pager.hidden{display:none!important}
+.inventory-pager-info{min-width:0;color:var(--muted);font-size:12px;line-height:1.45}
+.inventory-pager-info b{display:block;color:var(--text);font-size:13px}
+.inventory-pager-actions{display:flex;gap:8px;flex:0 0 auto}
+.inventory-pager-actions .btn{min-width:104px}
+.mini-qr.mini-qr-placeholder{
+  position:relative;
+  z-index:2;
+  width:88px;
+  height:88px;
+  padding:0;
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  color:#071b14;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  box-shadow:0 9px 22px rgba(0,0,0,.18);
+}
+.mini-qr-placeholder span{font-size:34px;line-height:1;font-weight:950}
+.mini-qr-placeholder small{font-size:10px;font-weight:950;letter-spacing:1.4px}
+.mini-qr-placeholder:active{transform:scale(.97)}
+@media(max-width:560px){
+  .inventory-pager{align-items:stretch;flex-direction:column;margin-top:13px;padding:11px}
+  .inventory-pager-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .inventory-pager-actions .btn{min-width:0;width:100%;min-height:42px}
+  .mini-qr.mini-qr-placeholder{width:62px;height:62px;border-radius:10px}
+  .mini-qr-placeholder span{font-size:26px}
+  .mini-qr-placeholder small{font-size:8px}
+}
+
 </style>
 
 <style>
@@ -6214,6 +6266,13 @@ body.scanner-mode #pwaInstallBox{display:none!important}
         </select>
       </div>
       <div class="inventory-grid" id="inventoryGrid"></div>
+      <div class="inventory-pager hidden" id="inventoryPager" aria-live="polite">
+        <div class="inventory-pager-info" id="inventoryPagerInfo"></div>
+        <div class="inventory-pager-actions">
+          <button class="btn ghost" type="button" id="inventoryPrevBtn" onclick="changeInventoryPage(-1)">← Anterior</button>
+          <button class="btn primary" type="button" id="inventoryNextBtn" onclick="changeInventoryPage(1)">Siguiente →</button>
+        </div>
+      </div>
     </section>
 
     <section class="view" id="view-register">
@@ -8278,7 +8337,13 @@ loans.forEach(loan=>{
 purgeExpiredTrash(false);
 save();
 function initials(s){return s.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()}
-function used(id){return loans.filter(l=>l.itemId===id).reduce((a,b)=>a+Number(b.qty),0)}
+function used(id){
+ let total=0;
+ for(const loan of loans){
+   if(String(loan.itemId)===String(id))total+=Number(loan.qty||0);
+ }
+ return total;
+}
 function available(item){return Math.max(0,Number(item.total)-used(item.id))}
 function overdue(l){return false}
 function toast(t,sub=""){const e=$("#toast"),title=e.querySelector(".toast-title"),subtitle=e.querySelector(".toast-subtitle");title.textContent=t||"Aviso";subtitle.textContent=sub||"";e.classList.toggle("has-subtitle",!!sub);e.classList.add("show");clearTimeout(window.__t);window.__t=setTimeout(()=>e.classList.remove("show"),2600)}
@@ -8353,8 +8418,7 @@ function resetInventoryViewState(){
   if(filterSelect)filterSelect.value="all";
   if(inventoryView)inventoryView.classList.remove("low-stock-mode");
   if(inventoryGrid)inventoryGrid.classList.remove("low-stock-grid");
-
-  if(typeof renderInventory==="function")renderInventory();
+  inventoryPage=1;
 }
 function go(v){
  if(!meta[v])return;
@@ -8398,6 +8462,9 @@ function go(v){
  }else{
    document.body.classList.remove("scanner-mode");
  }
+
+ // Las vistas pesadas se actualizan solo cuando realmente se abren.
+ if(v==="inventory")requestAnimationFrame(()=>renderInventory());
 }
 
 function cardIcon(item){
@@ -8682,10 +8749,10 @@ function dashboardLowStockItems(){
 }
 function openDashboardInventory(filter="all"){
  warehouseCategory="all";
- go("inventory");
+ resetInventoryPage();
  const select=$("#inventoryFilter");
  if(select)select.value=filter;
- renderInventory();
+ go("inventory");
 }
 function renderDashboard(){
  const alerts=loans.filter(l=>["Importante","Crítica"].includes(l.priority));
@@ -8727,6 +8794,19 @@ function renderDashboard(){
 }
 let warehouseCategory="all";
 let categoryViewMode="manage";
+let inventoryPage=1;
+let inventoryLastPage=1;
+let inventorySearchTimer=null;
+function inventoryPageSize(){return window.innerWidth<=820?16:32}
+function resetInventoryPage(){inventoryPage=1}
+function changeInventoryPage(delta){
+ const next=Math.min(inventoryLastPage,Math.max(1,inventoryPage+Number(delta||0)));
+ if(next===inventoryPage)return;
+ inventoryPage=next;
+ renderInventory();
+ const intro=document.querySelector("#view-inventory .warehouse-intro");
+ if(intro)intro.scrollIntoView({block:"start",behavior:"auto"});
+}
 function warehouseKind(item){
  const text=`${item.name||""} ${item.category||""}`.toLowerCase();
  if(item.type==="serialized")return "equipment";
@@ -8764,6 +8844,7 @@ function renderWarehouseTabs(){
 }
 function setWarehouseCategory(kind){
  warehouseCategory=kind||"all";
+ resetInventoryPage();
  renderInventory();
 }
 function openCategoriesView(mode="manage"){
@@ -8773,57 +8854,106 @@ function openCategoriesView(mode="manage"){
 }
 function openWarehouseCategory(kind){
  warehouseCategory=kind||"all";
+ resetInventoryPage();
  go("inventory");
- renderInventory();
 }
 function renderInventory(){
- const q=( $("#inventorySearch")?.value || "" ).toLowerCase();
+ const grid=$("#inventoryGrid");
+ if(!grid)return;
+
+ const q=String($("#inventorySearch")?.value||"").trim().toLowerCase();
  const f=$("#inventoryFilter")?.value||"all";
- let data=items.filter(i=>[i.name,i.code,i.serial,i.qrValue,i.category].join(" ").toLowerCase().includes(q));
+
+ // Se calcula el uso una sola vez por render, en lugar de recorrer
+ // todas las entregas varias veces por cada producto.
+ const usageByItem=new Map();
+ for(const loan of loans){
+   const key=String(loan.itemId);
+   usageByItem.set(key,(usageByItem.get(key)||0)+Number(loan.qty||0));
+ }
+ const itemUsed=item=>usageByItem.get(String(item.id))||0;
+ const itemAvailable=item=>Math.max(0,Number(item.total||0)-itemUsed(item));
+ const itemLow=item=>{
+   const total=Number(item?.total||0),current=itemAvailable(item),threshold=Math.max(1,Math.ceil(total*.2));
+   return total>0&&current<total&&current<=threshold;
+ };
+
+ let data=items;
+ if(q){
+   data=data.filter(i=>[i.name,i.code,i.serial,i.qrValue,i.category]
+     .map(value=>String(value||""))
+     .join(" ")
+     .toLowerCase()
+     .includes(q));
+ }
  if(warehouseCategory!=="all")data=data.filter(i=>warehouseCategoryMatches(i,warehouseCategory));
- if(f==="available")data=data.filter(i=>available(i)>0);
- if(f==="inuse")data=data.filter(i=>used(i.id)>0);
- if(f==="low")data=data.filter(isLowStockItem);
+ if(f==="available")data=data.filter(i=>itemAvailable(i)>0);
+ if(f==="inuse")data=data.filter(i=>itemUsed(i)>0);
+ if(f==="low")data=data.filter(itemLow);
+
  const inventoryView=$("#view-inventory");
- const inventoryGrid=$("#inventoryGrid");
  if(inventoryView)inventoryView.classList.toggle("low-stock-mode",f==="low");
- if(inventoryGrid)inventoryGrid.classList.toggle("low-stock-grid",f==="low");
+ grid.classList.toggle("low-stock-grid",f==="low");
  renderWarehouseTabs();
+
  if($("#warehouseItemCount"))$("#warehouseItemCount").textContent=1+[...systemCategories(),...customRegisterTypes].length;
  if($("#warehouseAvailableCount"))$("#warehouseAvailableCount").textContent=items.reduce((sum,item)=>sum+Number(item.total||0),0);
- $("#inventoryGrid").innerHTML=data.map((i,index)=>{
-   const av=available(i),u=used(i.id),pct=i.total?Math.round(av/i.total*100):0,icon=cardIcon(i),kind=warehouseKind(i);
+
+ const pageSize=inventoryPageSize();
+ inventoryLastPage=Math.max(1,Math.ceil(data.length/pageSize));
+ inventoryPage=Math.min(inventoryLastPage,Math.max(1,inventoryPage));
+ const start=(inventoryPage-1)*pageSize;
+ const pageData=data.slice(start,start+pageSize);
+
+ grid.innerHTML=pageData.map((i,index)=>{
+   const u=itemUsed(i),av=Math.max(0,Number(i.total||0)-u),pct=Number(i.total||0)?Math.round(av/Number(i.total||0)*100):0;
+   const icon=cardIcon(i),kind=warehouseKind(i);
    const kindLabel=kind==="equipment"?"Equipo":kind==="consumables"?"Consumible":"Herramienta";
-   const highlightLow=f==="low"&&isLowStockItem(i);
+   const highlightLow=f==="low"&&itemLow(i);
    const lowClass=highlightLow?" low-stock-card":"";
-   const lowStyle=highlightLow?` style="--low-delay:${Math.min(index*75,450)}ms"`:"";
+   const lowStyle=highlightLow?` style="--low-delay:${Math.min(index*45,260)}ms"`:"";
+   const safeName=escapeHtml(String(i.name||"Sin nombre"));
+   const safeCode=escapeHtml(String(i.code||"Sin código"));
+   const safeCategory=escapeHtml(String(i.category||"Sin categoría"));
+   const safeSerial=i.serial?` · Serie ${escapeHtml(String(i.serial))}`:"";
    return `<article class="inv-card${lowClass}"${lowStyle}>
      <div class="inv-top">
-       ${i.photo?`<img class="inv-photo" src="${i.photo}" alt="">`:""}
-       <span class="badge blue inv-code">${i.code}</span>
+       ${i.photo?`<img class="inv-photo" src="${escapeHtml(String(i.photo))}" alt="" loading="lazy" decoding="async">`:""}
+       <span class="badge blue inv-code">${safeCode}</span>
        <span class="badge ${kind==="equipment"?"amber":"green"} inv-type">${kindLabel}</span>
-       <div class="mini-qr"><canvas id="qrmini-${i.id}" width="100" height="100"></canvas></div>
+       <button class="mini-qr mini-qr-placeholder" type="button" onclick="showQr(${JSON.stringify(i.id)})" aria-label="Ver QR de ${safeName}"><span>⌗</span><small>QR</small></button>
      </div>
      <div class="inv-body">
-       <h3>${icon} ${i.name}</h3>
-       <p>${i.category} ${i.serial?`· Serie ${i.serial}`:""}</p>
+       <h3>${icon} ${safeName}</h3>
+       <p>${safeCategory}${safeSerial}</p>
        <div class="inv-numbers">
-         <div><small>TOTAL</small><b>${i.total}</b></div>
+         <div><small>TOTAL</small><b>${Number(i.total||0)}</b></div>
          <div><small>DISPONIBLE</small><b>${av}</b></div>
          <div><small>EN USO</small><b>${u}</b></div>
        </div>
-       <div class="bar"><span style="width:${pct}%"></span></div>
+       <div class="bar"><span style="width:${Math.max(0,Math.min(100,pct))}%"></span></div>
        <div class="inv-actions">
-         <button class="btn ghost" onclick="showQr(${i.id})">${actionLabel("qr")}</button>
-         <button class="btn ghost" onclick="editItem(${i.id})">${actionLabel("edit")}</button>
-         <button class="btn ghost delete-item-btn" onclick="requestDeleteItem(${i.id})">${actionLabel("delete")}</button>
-         <button class="btn ghost span-2" onclick="openStock(${i.id})">${actionLabel("stock")}</button>
-         <button class="btn primary" ${av<=0?"disabled":""} onclick="deliverItem(${i.id})">${av<=0?"Sin stock":actionLabel("deliver")}</button>
+         <button class="btn ghost" onclick="showQr(${JSON.stringify(i.id)})">${actionLabel("qr")}</button>
+         <button class="btn ghost" onclick="editItem(${JSON.stringify(i.id)})">${actionLabel("edit")}</button>
+         <button class="btn ghost delete-item-btn" onclick="requestDeleteItem(${JSON.stringify(i.id)})">${actionLabel("delete")}</button>
+         <button class="btn ghost span-2" onclick="openStock(${JSON.stringify(i.id)})">${actionLabel("stock")}</button>
+         <button class="btn primary" ${av<=0?"disabled":""} onclick="deliverItem(${JSON.stringify(i.id)})">${av<=0?"Sin stock":actionLabel("deliver")}</button>
        </div>
      </div>
    </article>`;
  }).join("")||empty("No se encontraron productos en el almacén.");
- data.forEach(i=>{const c=$("#qrmini-"+i.id);if(c)drawQr(c,qrPayload(i),100)});
+
+ const pager=$("#inventoryPager"),info=$("#inventoryPagerInfo"),prev=$("#inventoryPrevBtn"),next=$("#inventoryNextBtn");
+ if(pager){
+   const show=data.length>pageSize;
+   pager.classList.toggle("hidden",!show);
+   if(info){
+     const first=data.length?start+1:0,last=Math.min(start+pageSize,data.length);
+     info.innerHTML=`<b>Mostrando ${first}–${last} de ${data.length}</b>Página ${inventoryPage} de ${inventoryLastPage}`;
+   }
+   if(prev)prev.disabled=inventoryPage<=1;
+   if(next)next.disabled=inventoryPage>=inventoryLastPage;
+ }
 }
 
 function openDeleteConfirmation({mode,id="",title,text,button="Sí, eliminar",icon="🗑"}){
@@ -9707,7 +9837,25 @@ function renderAlerts(){
     ? data.map(l=>`<div class="record"><div class="avatar" style="color:var(--amber)">!</div><div><div class="title">${l.itemName} · ${l.worker}</div><div class="meta">Prioridad ${l.priority.toLowerCase()} · ${l.job}<br>Entrega ${fmt(l.createdAt)}</div></div>${badgeLoan(l)}</div>`).join("")
     : `<div class="alerts-empty-state"><h3>Sin resultados</h3><p>Todo está bajo control.</p></div>`;
 }
-function renderAll(){populateWorkers();populateDelivery();renderDashboard();renderInventory();renderRegisterChoices();renderCategories();renderTrash();renderWorkers();renderWorkerDetail();renderActive();renderLoanDetail();renderReturns();renderStock();renderStockDetail();renderAlerts();if(typeof renderExcelExport==="function")renderExcelExport();setTimeout(()=>{syncDeliveryWorkerSelection();updateDeliverySubmitState()},0)}
+function renderAll(){
+ populateWorkers();
+ populateDelivery();
+ renderDashboard();
+ if(currentView==="inventory")renderInventory();
+ renderRegisterChoices();
+ renderCategories();
+ renderTrash();
+ renderWorkers();
+ renderWorkerDetail();
+ renderActive();
+ renderLoanDetail();
+ renderReturns();
+ renderStock();
+ renderStockDetail();
+ renderAlerts();
+ if(typeof renderExcelExport==="function")renderExcelExport();
+ setTimeout(()=>{syncDeliveryWorkerSelection();updateDeliverySubmitState()},0);
+}
 async function compress(file,max=850,q=.78){
  if(!file)throw new Error("No se recibió la imagen");
  if(file.type && !file.type.startsWith("image/"))throw new Error("El archivo no es una imagen");
@@ -10641,7 +10789,23 @@ $("#extendLoanForm").onsubmit=e=>{
 };
 
 $("#closeScannerOverlay").onclick=()=>{if(itemQrAssociationMode){cancelItemQrAssociation();return;}go("dashboard")};$("#toggleTorchBtn").onclick=toggleTorch;$("#qrImage").onchange=e=>scanImage(e.target.files[0]);$("#printQr").onclick=()=>window.print();
-$("#inventorySearch").oninput=renderInventory;$("#inventoryFilter").onchange=renderInventory;if($("#trashSearch"))$("#trashSearch").oninput=renderTrash;$("#activeSearch").oninput=renderActive;$("#activeFilter").onchange=renderActive;$("#returnSearch").oninput=renderReturns;$("#stockSearch").oninput=renderStock;$("#stockFilter").onchange=renderStock;
+$("#inventorySearch").oninput=()=>{
+ resetInventoryPage();
+ clearTimeout(inventorySearchTimer);
+ inventorySearchTimer=setTimeout(renderInventory,180);
+};
+$("#inventoryFilter").onchange=()=>{resetInventoryPage();renderInventory()};
+if($("#trashSearch"))$("#trashSearch").oninput=renderTrash;$("#activeSearch").oninput=renderActive;$("#activeFilter").onchange=renderActive;$("#returnSearch").oninput=renderReturns;$("#stockSearch").oninput=renderStock;$("#stockFilter").onchange=renderStock;
+let inventoryResizeTimer=null;
+window.addEventListener("resize",()=>{
+ clearTimeout(inventoryResizeTimer);
+ inventoryResizeTimer=setTimeout(()=>{
+   if(currentView==="inventory"){
+     resetInventoryPage();
+     renderInventory();
+   }
+ },180);
+});
 if($("#resetDemo"))$("#resetDemo").onclick=()=>{if(confirm("¿Restablecer todos los datos de prueba?")){["tc2_items","tc2_loans","tc2_stock","tc2_trash","tc2_workers","tc2_worker_trash","tc2_register_types","tc2_category_trash"].forEach(k=>localStorage.removeItem(k));items=structuredClone(seedItems);loans=structuredClone(seedLoans);stockHistory=structuredClone(seedStock);trashItems=[];workers=structuredClone(seedWorkers);workerTrash=[];customRegisterTypes=[];categoryTrash=[];save();renderAll();toast("Datos restablecidos")}};
 $("#dateChip").textContent=new Intl.DateTimeFormat("es-PE",{weekday:"long",day:"2-digit",month:"long"}).format(new Date());$("#scanSupport").textContent=("BarcodeDetector" in window)?"Lector de QR y códigos de barras compatible. Para usar la cámara abre la página con HTTPS o localhost.":"El lector automático no está disponible en este navegador; usa la búsqueda manual.";
 renderAll();
