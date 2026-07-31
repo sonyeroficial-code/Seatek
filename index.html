@@ -4099,8 +4099,31 @@ body.sidebar-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;overs
 
 
 /* ====== ENTREGA DE VARIAS HERRAMIENTAS ====== */
-#view-delivery .delivery-tools-field{grid-column:1/-1}
-#view-delivery .delivery-tools-field>select{width:100%}
+#view-delivery .delivery-tools-field{grid-column:1/-1;position:relative;z-index:7}
+#view-delivery .delivery-tool-search{position:relative}
+#view-delivery .delivery-tool-searchbox{position:relative;display:flex;align-items:center;border:1px solid rgba(44,224,163,.32);border-radius:16px;background:linear-gradient(180deg,rgba(8,29,41,.98),rgba(7,24,35,.98));box-shadow:0 0 0 3px rgba(44,224,163,.035),0 12px 28px rgba(0,0,0,.14);transition:.2s}
+#view-delivery .delivery-tool-searchbox:focus-within{border-color:rgba(76,241,188,.82);box-shadow:0 0 0 4px rgba(44,224,163,.09),0 14px 32px rgba(0,0,0,.2)}
+#view-delivery .delivery-tool-searchbox input{min-height:52px!important;padding:12px 46px 12px 47px!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:16px!important;font-size:14px!important}
+#view-delivery .delivery-tool-searchbox input::-webkit-search-cancel-button{display:none}
+#view-delivery .delivery-tool-search-icon{position:absolute;left:15px;top:50%;transform:translateY(-53%);z-index:2;color:#e8f7f2;font-size:30px;line-height:1;font-family:Arial,sans-serif;font-weight:300;pointer-events:none}
+#view-delivery .delivery-tool-search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:31px;height:31px;border-radius:10px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.055);color:#dce8ee;font-size:20px;line-height:1;display:grid;place-items:center;padding:0}
+#view-delivery .delivery-tool-search-clear.hidden{display:none}
+#view-delivery .delivery-tool-search-hint{display:block;margin-top:7px;color:#7f95a3;font-size:10.5px;line-height:1.4}
+#view-delivery .delivery-tool-suggestions{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:30;display:grid;gap:6px;max-height:310px;overflow:auto;padding:8px;border-radius:17px;border:1px solid rgba(44,224,163,.2);background:rgba(5,22,32,.985);box-shadow:0 22px 50px rgba(0,0,0,.48);backdrop-filter:blur(18px)}
+#view-delivery .delivery-tool-suggestions.hidden{display:none}
+#view-delivery .delivery-tool-result{width:100%;display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;border:1px solid transparent;border-radius:13px;background:rgba(255,255,255,.025);color:#f4fafc;text-align:left;transition:.16s}
+#view-delivery .delivery-tool-result:hover,#view-delivery .delivery-tool-result:active{background:rgba(44,224,163,.085);border-color:rgba(44,224,163,.17)}
+#view-delivery .delivery-tool-result:disabled{opacity:.58;cursor:not-allowed}
+#view-delivery .delivery-tool-result-thumb{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,rgba(44,224,163,.16),rgba(91,185,255,.10));border:1px solid rgba(44,224,163,.14);font-size:19px}
+#view-delivery .delivery-tool-result-thumb img{width:100%;height:100%;object-fit:cover}
+#view-delivery .delivery-tool-result-copy{min-width:0}
+#view-delivery .delivery-tool-result-copy b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#view-delivery .delivery-tool-result-copy small{display:block;margin-top:3px;color:#8ea2af;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#view-delivery .delivery-tool-result-side{display:grid;justify-items:end;gap:4px}
+#view-delivery .delivery-tool-result-stock{font-size:9px;font-weight:850;color:#7cefc7;white-space:nowrap}
+#view-delivery .delivery-tool-result-stock.out{color:#ff99ad}
+#view-delivery .delivery-tool-result-add{width:29px;height:29px;border-radius:10px;display:grid;place-items:center;background:rgba(44,224,163,.14);border:1px solid rgba(44,224,163,.18);color:#8ff3d0;font-size:20px;font-weight:700}
+#view-delivery .delivery-tool-no-results{padding:18px 14px;text-align:center;color:#8fa2ae;font-size:11.5px;border:1px dashed rgba(255,255,255,.08);border-radius:13px}
 #view-delivery .delivery-selected-list{display:grid;gap:8px;margin-top:9px}
 #view-delivery .delivery-selection-empty{padding:10px 12px;border:1px dashed rgba(116,238,196,.22);border-radius:13px;color:#8ca0ad;font-size:11.5px;background:rgba(255,255,255,.018)}
 #view-delivery .delivery-selection-head{display:flex;align-items:center;justify-content:space-between;padding:0 2px;color:#9fb1bd;font-size:11px}
@@ -4116,6 +4139,13 @@ body.sidebar-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;overs
 #view-delivery .delivery-remove-item{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,114,148,.28);background:rgba(255,72,116,.08);color:#ff9db5;font-size:17px;display:grid;place-items:center}
 #view-delivery .delivery-remove-item:active{transform:scale(.95)}
 @media(max-width:560px){
+ #view-delivery .delivery-tool-searchbox input{min-height:48px!important;padding-left:43px!important;font-size:13px!important}
+ #view-delivery .delivery-tool-search-icon{left:13px;font-size:27px}
+ #view-delivery .delivery-tool-suggestions{max-height:270px;padding:7px;border-radius:15px}
+ #view-delivery .delivery-tool-result{grid-template-columns:38px minmax(0,1fr) auto;padding:9px;gap:8px}
+ #view-delivery .delivery-tool-result-thumb{width:38px;height:38px;border-radius:11px;font-size:17px}
+ #view-delivery .delivery-tool-result-copy b{font-size:11.7px}
+ #view-delivery .delivery-tool-result-copy small{font-size:9.3px}
  #view-delivery .delivery-selected-item{grid-template-columns:minmax(0,1fr) 72px 32px;padding:8px;gap:6px}
  #view-delivery .delivery-selected-main strong{font-size:11.5px}
  #view-delivery .delivery-selected-main small{font-size:9.5px}
@@ -6448,7 +6478,7 @@ body.scanner-mode #pwaInstallBox{display:none!important}
         <article class="panel">
           <div class="step-title"><span>1</span><div><h3>Datos de la entrega</h3><p>El stock disponible se actualizará automáticamente.</p></div></div>
           <div class="form-grid">
-            <label class="field full delivery-tools-field"><span>AGREGAR HERRAMIENTAS</span><select id="deliveryItem"><option value="">Seleccionar herramienta o equipo...</option></select><div class="delivery-selected-list" id="deliverySelectedList"></div></label>
+            <div class="field full delivery-tools-field"><span>AGREGAR HERRAMIENTAS</span><div class="delivery-tool-search"><div class="delivery-tool-searchbox"><span class="delivery-tool-search-icon" aria-hidden="true">⌕</span><input id="deliveryItemSearch" type="search" autocomplete="off" placeholder="Buscar herramienta, equipo o código..." aria-label="Buscar herramienta, equipo o código"><button class="delivery-tool-search-clear hidden" id="clearDeliveryItemSearch" type="button" aria-label="Limpiar búsqueda">×</button></div><div class="delivery-tool-suggestions hidden" id="deliveryItemSuggestions"></div></div><small class="field-hint delivery-tool-search-hint">Escribe el nombre, código, categoría o número de serie.</small><div class="delivery-selected-list" id="deliverySelectedList"></div></div>
             <label class="field delivery-worker-field"><span>TRABAJADOR REGISTRADO</span><div class="worker-search-wrap"><input id="deliveryWorker" required autocomplete="off" placeholder="Buscar por nombre o DNI..."><button class="worker-search-clear hidden" id="clearDeliveryWorkerBtn" type="button" aria-label="Limpiar trabajador">×</button></div><input id="deliveryWorkerId" type="hidden"><div class="worker-suggestions hidden" id="workerSuggestions"></div><small class="field-hint" id="deliveryWorkerHint">Selecciona una persona registrada por nombre o DNI.</small></label>
             <label class="field"><span>TRABAJO O ACTIVIDAD</span><input id="deliveryJob" required placeholder="Ej. Mantenimiento de bomba"></label>
             <label class="field"><span>PRIORIDAD</span><select id="deliveryPriority"><option>Normal</option><option>Importante</option><option>Crítica</option></select></label>
@@ -9194,14 +9224,49 @@ function setDeliverySelectionQty(id,value){
  entry.qty=item.type==="serialized"?1:Math.min(Math.max(1,Number(value)||1),max);
  updateDeliverySubmitState();
 }
+function normalizeDeliveryToolText(value){
+ return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+}
+function deliveryToolMatches(item,query){
+ if(!query)return true;
+ const haystack=normalizeDeliveryToolText([item.name,item.code,item.category,item.serial,item.type].join(" "));
+ return query.split(/\s+/).every(term=>haystack.includes(term));
+}
+function renderDeliveryItemSuggestions(forceOpen=false){
+ const input=$("#deliveryItemSearch"),box=$("#deliveryItemSuggestions"),clear=$("#clearDeliveryItemSearch");
+ if(!input||!box)return;
+ const raw=input.value.trim(),query=normalizeDeliveryToolText(raw),selectedIds=new Set(deliverySelection.map(x=>x.itemId));
+ if(clear)clear.classList.toggle("hidden",!raw);
+ const shouldOpen=forceOpen||document.activeElement===input||!!raw;
+ if(!shouldOpen){box.classList.add("hidden");return;}
+ const matches=items.filter(item=>!selectedIds.has(item.id)&&deliveryToolMatches(item,query)).sort((a,b)=>{
+  const stockDiff=(available(b)>0)-(available(a)>0);
+  if(stockDiff)return stockDiff;
+  return String(a.name||"").localeCompare(String(b.name||""),"es",{sensitivity:"base"});
+ }).slice(0,10);
+ if(!matches.length){
+  box.innerHTML=`<div class="delivery-tool-no-results">${raw?`No encontramos herramientas para “${escapeHtml(raw)}”.`:`No hay más herramientas disponibles.`}</div>`;
+ }else{
+  box.innerHTML=matches.map(item=>{
+   const stock=available(item),photo=item.photo?`<img src="${escapeHtml(item.photo)}" alt="">`:(item.type==="serialized"?"⚙":"🔧");
+   const detail=[item.code,item.category,item.serial].filter(Boolean).map(escapeHtml).join(" · ");
+   return `<button class="delivery-tool-result" type="button" ${stock<=0?"disabled":""} onclick="selectDeliveryItemFromSearch(${item.id})"><span class="delivery-tool-result-thumb">${photo}</span><span class="delivery-tool-result-copy"><b>${escapeHtml(item.name)}</b><small>${detail||"Herramienta registrada"}</small></span><span class="delivery-tool-result-side"><span class="delivery-tool-result-stock ${stock<=0?"out":""}">${stock>0?`${stock} disponible${stock===1?"":"s"}`:"Sin stock"}</span><span class="delivery-tool-result-add">＋</span></span></button>`;
+  }).join("");
+ }
+ box.classList.remove("hidden");
+}
+function selectDeliveryItemFromSearch(id){
+ addDeliverySelection(id);
+ const input=$("#deliveryItemSearch"),box=$("#deliveryItemSuggestions");
+ if(input){input.value="";input.focus();}
+ if(box)box.classList.add("hidden");
+ renderDeliveryItemSuggestions(true);
+}
 function populateDelivery(){
- const select=$("#deliveryItem");if(!select)return;
  normalizeDeliverySelection();
- const selectedIds=new Set(deliverySelection.map(x=>x.itemId));
- const placeholder=deliverySelection.length?"Agregar otra herramienta...":"Seleccionar herramienta o equipo...";
- select.innerHTML=`<option value="">${placeholder}</option>`+items.filter(i=>!selectedIds.has(i.id)).map(i=>`<option value="${i.id}" ${available(i)<=0?"disabled":""}>${i.name} · ${i.code} — ${available(i)} disponible(s)</option>`).join("");
- select.value="";
- renderDeliverySelection();updateDeliverySubmitState();
+ renderDeliverySelection();
+ renderDeliveryItemSuggestions(false);
+ updateDeliverySubmitState();
 }
 function loanCard(l){
  return `<article class="loan-card">${avatar(l)}<div><div class="loan-head"><div><h3>${l.itemName}</h3><div class="meta">${l.code} · Cant. ${l.qty}</div></div>${badgeLoan(l)}</div><div class="meta" style="margin-top:7px"><b class="meta-strong">${l.worker}</b><br>${l.job}</div><div class="delivery-date-preview"><small>Fecha de entrega</small><b>${fmtDateCompact(l.createdAt)}</b><span>${fmtTimeOnly(l.createdAt)}</span></div></div><div class="loan-actions"><button class="btn ghost small" onclick="showLoan(${l.id})">Ver detalle</button><button class="btn primary small" onclick="openReturn(${l.id})">Registrar devolución</button></div></article>`
@@ -10736,7 +10801,27 @@ function updateDeliverySubmitState(){
     el.addEventListener("change",updateDeliverySubmitState);
   }
 });
-$("#deliveryItem").addEventListener("change",e=>{const id=Number(e.target.value);if(id)addDeliverySelection(id);e.target.value="";});
+const deliveryItemSearch=$("#deliveryItemSearch");
+if(deliveryItemSearch){
+ deliveryItemSearch.addEventListener("focus",()=>renderDeliveryItemSuggestions(true));
+ deliveryItemSearch.addEventListener("input",()=>renderDeliveryItemSuggestions(true));
+ deliveryItemSearch.addEventListener("keydown",e=>{
+  if(e.key==="Escape")$("#deliveryItemSuggestions")?.classList.add("hidden");
+  if(e.key==="Enter"){
+   const first=$("#deliveryItemSuggestions .delivery-tool-result:not(:disabled)");
+   if(first){e.preventDefault();first.click();}
+  }
+ });
+}
+const clearDeliveryItemSearch=$("#clearDeliveryItemSearch");
+if(clearDeliveryItemSearch)clearDeliveryItemSearch.addEventListener("click",()=>{
+ if(!deliveryItemSearch)return;
+ deliveryItemSearch.value="";deliveryItemSearch.focus();renderDeliveryItemSuggestions(true);
+});
+document.addEventListener("click",e=>{
+ const search=$(".delivery-tool-search");
+ if(search&&!search.contains(e.target))$("#deliveryItemSuggestions")?.classList.add("hidden");
+});
 
 $("#deliveryForm").onsubmit=e=>{
  e.preventDefault();
