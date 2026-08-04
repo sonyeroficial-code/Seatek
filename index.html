@@ -5869,6 +5869,445 @@ body.scanner-mode #pwaInstallBox{display:none!important}
 }
 </style>
 
+
+<style id="v79-worker-register-compact">
+/* Registro de trabajador: tarjeta centrada, con aire lateral y formulario más corto. */
+#view-worker-register{
+  width:100%;
+  max-width:680px;
+  margin:0 auto;
+}
+#view-worker-register .section-head,
+#view-worker-register .worker-form-panel{
+  width:100%;
+  max-width:620px;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+#view-worker-register .worker-form-panel{
+  padding:13px !important;
+  border-radius:20px !important;
+}
+#view-worker-register .worker-form-intro{
+  gap:9px !important;
+  margin-bottom:10px !important;
+  padding-bottom:10px !important;
+}
+#view-worker-register .worker-form-icon{
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  border-radius:12px !important;
+  font-size:18px !important;
+}
+#view-worker-register .worker-form-intro h3{
+  font-size:16px !important;
+}
+#view-worker-register .worker-form-intro p{
+  font-size:10px !important;
+  line-height:1.25 !important;
+}
+#view-worker-register .worker-form-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:7px !important;
+}
+#view-worker-register .worker-form-grid > .full,
+#view-worker-register .worker-form-grid > .worker-portal-access{
+  grid-column:1 / -1 !important;
+}
+#view-worker-register .field{
+  min-width:0;
+  gap:4px !important;
+}
+#view-worker-register .field > span{
+  font-size:8.8px !important;
+  line-height:1.2 !important;
+  letter-spacing:.08em !important;
+}
+#view-worker-register .field input,
+#view-worker-register .field select{
+  min-height:38px !important;
+  height:38px !important;
+  padding:7px 10px !important;
+  border-radius:12px !important;
+  font-size:11.5px !important;
+}
+#view-worker-register .worker-portal-access{
+  padding:10px !important;
+  border-radius:15px !important;
+}
+#view-worker-register .worker-portal-access-head{
+  gap:8px !important;
+  margin-bottom:8px !important;
+}
+#view-worker-register .worker-portal-access-icon{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  border-radius:10px !important;
+  font-size:16px !important;
+}
+#view-worker-register .worker-portal-access-head b{
+  font-size:12.5px !important;
+}
+#view-worker-register .worker-portal-access-head small{
+  margin-top:2px !important;
+  font-size:9.5px !important;
+  line-height:1.25 !important;
+}
+#view-worker-register .worker-pin-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:7px !important;
+}
+#view-worker-register .worker-pin-help{
+  margin-top:7px !important;
+  font-size:9.5px !important;
+  line-height:1.35 !important;
+}
+#view-worker-register .worker-photo-actions{
+  gap:7px !important;
+}
+#view-worker-register .worker-photo-btn{
+  min-height:36px !important;
+  height:36px !important;
+  padding:6px 8px !important;
+  border-radius:11px !important;
+  font-size:10.5px !important;
+}
+#view-worker-register .worker-photo-empty{
+  min-height:30px !important;
+  padding:0 9px !important;
+  font-size:9.5px !important;
+}
+#view-worker-register .worker-photo-preview{
+  padding:6px !important;
+  gap:7px !important;
+}
+#view-worker-register .worker-photo-preview img{
+  width:40px !important;
+  height:40px !important;
+  min-width:40px !important;
+}
+#view-worker-register .worker-form-actions{
+  gap:7px !important;
+  margin-top:9px !important;
+  padding-top:9px !important;
+}
+#view-worker-register .worker-form-actions .btn{
+  min-height:38px !important;
+  height:38px !important;
+  border-radius:12px !important;
+  font-size:11px !important;
+}
+
+@media(max-width:560px){
+  #view-worker-register{
+    width:calc(100% - 14px) !important;
+    max-width:430px !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+  #view-worker-register .section-head{
+    align-items:center !important;
+    flex-direction:row !important;
+    margin:2px auto 8px !important;
+  }
+  #view-worker-register .section-head > div{
+    min-width:0;
+    flex:1;
+  }
+  #view-worker-register .section-head h2{
+    font-size:19px !important;
+    white-space:nowrap;
+  }
+  #view-worker-register .section-head p{
+    display:none !important;
+  }
+  #view-worker-register .section-head .btn{
+    min-height:34px !important;
+    height:34px !important;
+    padding:0 10px !important;
+    font-size:10px !important;
+    white-space:nowrap;
+  }
+  #view-worker-register .worker-form-panel{
+    padding:10px !important;
+    border-radius:17px !important;
+  }
+  #view-worker-register .worker-form-intro p{
+    display:none !important;
+  }
+  #view-worker-register .worker-form-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:6px !important;
+  }
+  #view-worker-register .field input,
+  #view-worker-register .field select{
+    min-height:37px !important;
+    height:37px !important;
+    padding:7px 9px !important;
+    font-size:11px !important;
+  }
+  #view-worker-register .worker-pin-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:6px !important;
+  }
+  #view-worker-register .worker-portal-access{
+    padding:9px !important;
+  }
+  #view-worker-register .worker-portal-access-head small{
+    font-size:9px !important;
+  }
+  #view-worker-register .worker-pin-help{
+    font-size:9px !important;
+  }
+  #view-worker-register .worker-form-actions{
+    position:static !important;
+    bottom:auto !important;
+    background:transparent !important;
+    padding:8px 0 0 !important;
+    margin-top:8px !important;
+  }
+  #view-worker-register .worker-form-actions .btn{
+    min-height:37px !important;
+    height:37px !important;
+  }
+}
+
+@media(max-width:370px){
+  #view-worker-register{
+    width:calc(100% - 8px) !important;
+  }
+  #view-worker-register .section-head h2{
+    font-size:17px !important;
+  }
+  #view-worker-register .section-head .btn{
+    padding:0 8px !important;
+    font-size:9px !important;
+  }
+  #view-worker-register .field > span{
+    font-size:8px !important;
+  }
+  #view-worker-register .field input,
+  #view-worker-register .field select{
+    font-size:10.5px !important;
+  }
+}
+</style>
+
+
+<style id="v80-worker-register-fullscreen-mobile">
+/* Registro de trabajador a pantalla completa en celular.
+   El formulario deja de verse como una tarjeta flotante y aprovecha todo el ancho. */
+@media (max-width:820px){
+  #view-worker-register{
+    width:calc(100% + 28px) !important;
+    max-width:none !important;
+    margin-left:-14px !important;
+    margin-right:-14px !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+
+  #view-worker-register .section-head{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:14px 16px 12px !important;
+  }
+
+  #view-worker-register .worker-form-panel{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:16px 14px 26px !important;
+    border-left:0 !important;
+    border-right:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    min-height:calc(100dvh - 86px - 64px);
+    background:linear-gradient(180deg,rgba(13,34,48,.98),rgba(7,25,36,.99));
+  }
+}
+
+@media (max-width:560px){
+  #view-worker-register{
+    width:calc(100% + 28px) !important;
+    max-width:none !important;
+  }
+
+  #view-worker-register .section-head{
+    margin:0 !important;
+    padding:12px 14px 10px !important;
+  }
+
+  #view-worker-register .worker-form-panel{
+    padding:14px 14px 24px !important;
+    border-radius:0 !important;
+  }
+}
+</style>
+
+
+<style id="v104-delivery-search-visual-fix">
+/* Ajuste visual del buscador de herramientas */
+#view-delivery .delivery-tool-searchbox{
+  position:relative;
+}
+#view-delivery .delivery-tool-search-icon{
+  left:18px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  font-size:18px !important;
+  color:#bfeee0 !important;
+  opacity:.92 !important;
+}
+#view-delivery .delivery-tool-searchbox input{
+  padding-left:54px !important;
+  padding-right:44px !important;
+}
+
+/* Lista de herramientas con color más diferenciado */
+#view-delivery .delivery-tool-suggestions{
+  background:linear-gradient(180deg,rgba(18,42,56,.985),rgba(9,24,35,.995)) !important;
+  border:1px solid rgba(91,185,255,.24) !important;
+  box-shadow:0 22px 50px rgba(0,0,0,.52),0 0 0 1px rgba(91,185,255,.08) inset !important;
+}
+#view-delivery .delivery-tool-result{
+  background:rgba(255,255,255,.05) !important;
+  border:1px solid rgba(91,185,255,.08) !important;
+}
+#view-delivery .delivery-tool-result:hover,
+#view-delivery .delivery-tool-result:active{
+  background:rgba(91,185,255,.11) !important;
+  border-color:rgba(91,185,255,.22) !important;
+}
+#view-delivery .delivery-tool-no-results{
+  background:rgba(255,255,255,.03) !important;
+  border-color:rgba(91,185,255,.16) !important;
+}
+#view-delivery .delivery-tool-result-add{
+  background:rgba(44,224,163,.12) !important;
+  border-color:rgba(44,224,163,.22) !important;
+}
+
+@media(max-width:560px){
+  #view-delivery .delivery-tool-search-icon{
+    left:16px !important;
+    font-size:17px !important;
+  }
+  #view-delivery .delivery-tool-searchbox input{
+    padding-left:50px !important;
+    padding-right:42px !important;
+  }
+  #view-delivery .delivery-tool-suggestions{
+    border-radius:16px !important;
+  }
+}
+</style>
+
+
+<style id="v105-worker-search-visual-fix">
+/* Buscador de trabajador con ícono bien separado */
+#view-delivery .delivery-worker-field .worker-search-wrap{
+  position:relative;
+}
+#view-delivery .delivery-worker-field .worker-search-wrap::before{
+  content:"⌕";
+  position:absolute;
+  left:18px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:2;
+  color:#bfeee0;
+  opacity:.92;
+  font-size:18px;
+  line-height:1;
+  font-family:Arial,sans-serif;
+  font-weight:400;
+  pointer-events:none;
+}
+#view-delivery .delivery-worker-field .worker-search-wrap input{
+  padding-left:54px !important;
+  padding-right:48px !important;
+}
+
+/* Lista de trabajadores con otro color para diferenciarla */
+#view-delivery .worker-suggestions{
+  background:linear-gradient(180deg,rgba(32,28,56,.985),rgba(18,20,39,.995)) !important;
+  border:1px solid rgba(153,135,255,.26) !important;
+  box-shadow:0 22px 50px rgba(0,0,0,.52),0 0 0 1px rgba(153,135,255,.08) inset !important;
+}
+#view-delivery .worker-suggestion{
+  background:rgba(255,255,255,.05) !important;
+  border:1px solid rgba(153,135,255,.08) !important;
+}
+#view-delivery .worker-suggestion:hover,
+#view-delivery .worker-suggestion:active{
+  background:rgba(153,135,255,.12) !important;
+  border-color:rgba(153,135,255,.24) !important;
+}
+#view-delivery .worker-suggestion-avatar{
+  background:linear-gradient(145deg,rgba(113,94,255,.18),rgba(57,205,255,.14)) !important;
+  border-color:rgba(153,135,255,.18) !important;
+}
+
+@media(max-width:560px){
+  #view-delivery .delivery-worker-field .worker-search-wrap::before{
+    left:16px;
+    font-size:17px;
+  }
+  #view-delivery .delivery-worker-field .worker-search-wrap input{
+    padding-left:50px !important;
+    padding-right:46px !important;
+  }
+  #view-delivery .worker-suggestions{
+    border-radius:16px !important;
+  }
+}
+</style>
+
+
+<style id="v106-delivery-tool-search-final-fix">
+/* Corrección final del buscador de herramientas */
+#view-delivery .delivery-tools-field .delivery-tool-searchbox{
+  position:relative;
+}
+#view-delivery .delivery-tools-field .delivery-tool-searchbox .delivery-tool-search-icon{
+  display:none !important;
+}
+#view-delivery .delivery-tools-field .delivery-tool-searchbox::before{
+  content:"⌕";
+  position:absolute;
+  left:18px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:2;
+  color:#bfeee0;
+  opacity:.95;
+  font-size:18px;
+  line-height:1;
+  font-family:Arial,sans-serif;
+  font-weight:400;
+  pointer-events:none;
+}
+#view-delivery .delivery-tools-field .delivery-tool-searchbox input{
+  padding-left:56px !important;
+  padding-right:44px !important;
+}
+
+@media(max-width:560px){
+  #view-delivery .delivery-tools-field .delivery-tool-searchbox::before{
+    left:16px;
+    font-size:17px;
+  }
+  #view-delivery .delivery-tools-field .delivery-tool-searchbox input{
+    padding-left:52px !important;
+    padding-right:42px !important;
+  }
+}
+</style>
+
 </head>
 <body class="auth-locked auth-booting">
 
@@ -6478,8 +6917,8 @@ body.scanner-mode #pwaInstallBox{display:none!important}
         <article class="panel">
           <div class="step-title"><span>1</span><div><h3>Datos de la entrega</h3><p>El stock disponible se actualizará automáticamente.</p></div></div>
           <div class="form-grid">
+            <label class="field full delivery-worker-field delivery-worker-field-top"><span>TRABAJADOR REGISTRADO</span><div class="worker-search-wrap"><input id="deliveryWorker" required autocomplete="off" placeholder="Buscar por nombre o DNI..."><button class="worker-search-clear hidden" id="clearDeliveryWorkerBtn" type="button" aria-label="Limpiar trabajador">×</button></div><input id="deliveryWorkerId" type="hidden"><div class="worker-suggestions hidden" id="workerSuggestions"></div><small class="field-hint" id="deliveryWorkerHint">Selecciona una persona registrada por nombre o DNI.</small></label>
             <div class="field full delivery-tools-field"><span>AGREGAR HERRAMIENTAS</span><div class="delivery-tool-search"><div class="delivery-tool-searchbox"><span class="delivery-tool-search-icon" aria-hidden="true">⌕</span><input id="deliveryItemSearch" type="search" autocomplete="off" placeholder="Buscar herramienta, equipo o código..." aria-label="Buscar herramienta, equipo o código"><button class="delivery-tool-search-clear hidden" id="clearDeliveryItemSearch" type="button" aria-label="Limpiar búsqueda">×</button></div><div class="delivery-tool-suggestions hidden" id="deliveryItemSuggestions"></div></div><small class="field-hint delivery-tool-search-hint">Escribe el nombre, código, categoría o número de serie.</small><div class="delivery-selected-list" id="deliverySelectedList"></div></div>
-            <label class="field delivery-worker-field"><span>TRABAJADOR REGISTRADO</span><div class="worker-search-wrap"><input id="deliveryWorker" required autocomplete="off" placeholder="Buscar por nombre o DNI..."><button class="worker-search-clear hidden" id="clearDeliveryWorkerBtn" type="button" aria-label="Limpiar trabajador">×</button></div><input id="deliveryWorkerId" type="hidden"><div class="worker-suggestions hidden" id="workerSuggestions"></div><small class="field-hint" id="deliveryWorkerHint">Selecciona una persona registrada por nombre o DNI.</small></label>
             <label class="field"><span>TRABAJO O ACTIVIDAD</span><input id="deliveryJob" required placeholder="Ej. Mantenimiento de bomba"></label>
             <label class="field"><span>PRIORIDAD</span><select id="deliveryPriority"><option>Normal</option><option>Importante</option><option>Crítica</option></select></label>
             <label class="field full"><span>OBSERVACIONES</span><textarea id="deliveryNotes" placeholder="Accesorios incluidos, estado u otros detalles..."></textarea></label>
@@ -11519,6 +11958,63 @@ renderAll();
   #view-delivery #removePhoto,
   #view-delivery #deliverySubmit{min-height:39px !important;height:39px !important;font-size:11.5px !important;}
 }
+#view-delivery{
+  padding-top:14px !important;
+}
+#view-delivery .form-layout{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:12px !important;
+}
+#view-delivery .panel{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  padding:0 !important;
+  overflow:visible !important;
+}
+#view-delivery .section-head{
+  margin-bottom:10px !important;
+}
+#view-delivery .step-title{
+  margin-bottom:10px !important;
+  padding-bottom:10px !important;
+  border-bottom:1px solid rgba(255,255,255,.06) !important;
+}
+#view-delivery .form-grid{
+  gap:10px !important;
+}
+#view-delivery .delivery-worker-field-top{
+  order:-1;
+}
+#view-delivery .delivery-worker-field-top .worker-search-wrap,
+#view-delivery .delivery-tools-field .delivery-tool-searchbox,
+#view-delivery .field input,
+#view-delivery .field select,
+#view-delivery .field textarea{
+  background:#081a26 !important;
+}
+#view-delivery .photo-stage.compact{
+  background:rgba(255,255,255,.02) !important;
+  border:1px dashed rgba(255,255,255,.10) !important;
+}
+#view-delivery #deliverySubmit{
+  min-height:46px !important;
+}
+@media(max-width:560px){
+  #view-delivery{
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+  #view-delivery .panel{
+    padding:0 !important;
+  }
+  #view-delivery .step-title{
+    gap:9px !important;
+  }
+}
+
 </style>
 
 
@@ -15049,6 +15545,142 @@ body.worker-qr-modal-open{overflow:hidden!important;overscroll-behavior:none!imp
   function cleanCode(value){return String(value||"").trim().toLowerCase().replace(/[^a-z0-9-]/g,"")}
   function portalEmail(dni){const code=cleanCode(dni);return code?`${code}@trabajador.seatek.local`:""}
   function pinValid(pin){return /^\d{6}$/.test(String(pin||""))}
+  function normalizeDni(value){return String(value||"").replace(/\s+/g,"").toUpperCase()}
+  let duplicateWorkerScrollTop=0;
+
+  function lockDuplicateWorkerBackground(){
+    duplicateWorkerScrollTop=window.scrollY||window.pageYOffset||0;
+    document.body.style.position="fixed";
+    document.body.style.top=`-${duplicateWorkerScrollTop}px`;
+    document.body.style.left="0";
+    document.body.style.right="0";
+    document.body.style.width="100%";
+    document.body.style.overflow="hidden";
+    document.body.style.touchAction="none";
+  }
+
+  function unlockDuplicateWorkerBackground(){
+    document.body.style.position="";
+    document.body.style.top="";
+    document.body.style.left="";
+    document.body.style.right="";
+    document.body.style.width="";
+    document.body.style.overflow="";
+    document.body.style.touchAction="";
+    window.scrollTo(0,duplicateWorkerScrollTop||0);
+  }
+
+  function resetWorkerRegisterForm(){
+    if(typeof newWorker==="function"){
+      newWorker();
+      return;
+    }
+    try{form?.reset?.()}catch(_){}
+    const status=document.getElementById("workerStatus");
+    const editId=document.getElementById("editWorkerId");
+    const pin=document.getElementById("workerPortalPin");
+    const pinConfirm=document.getElementById("workerPortalPinConfirm");
+    const accessFields=document.getElementById("workerPortalAccessFields");
+    if(editId)editId.value="";
+    if(status)status.value="Activo";
+    if(pin)pin.value="";
+    if(pinConfirm)pinConfirm.value="";
+    if(accessFields)accessFields.classList.remove("hidden");
+    try{window.editingWorkerPhoto="";}catch(_){}
+    try{typeof syncWorkerPhotoUi==="function"&&syncWorkerPhotoUi()}catch(_){}
+  }
+
+  function ensureDuplicateWorkerDialog(){
+    let dialog=document.getElementById("duplicateWorkerDialog");
+    if(dialog)return dialog;
+
+    const style=document.createElement("style");
+    style.id="duplicate-worker-dialog-style";
+    style.textContent=`
+      .duplicate-worker-dialog{
+        position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;
+        padding:18px;background:rgba(1,8,13,.72);backdrop-filter:blur(8px);overscroll-behavior:contain
+      }
+      .duplicate-worker-dialog.open{display:flex;animation:duplicateWorkerFade .18s ease}
+      .duplicate-worker-card{
+        width:min(330px,92vw);padding:18px 18px 16px;border-radius:22px;text-align:center;
+        border:1px solid rgba(255,116,137,.24);
+        background:linear-gradient(155deg,#102b3a,#091b27);
+        box-shadow:0 20px 56px rgba(0,0,0,.42);
+        animation:duplicateWorkerCard .22s cubic-bezier(.2,.8,.2,1)
+      }
+      .duplicate-worker-icon{
+        width:52px;height:52px;margin:0 auto 12px;border-radius:17px;display:grid;place-items:center;
+        background:rgba(255,116,137,.12);border:1px solid rgba(255,116,137,.22);
+        color:#ff91a2;font-size:26px;font-weight:900
+      }
+      .duplicate-worker-card h3{margin:0;color:#fff;font-size:19px;letter-spacing:-.35px}
+      .duplicate-worker-card p{margin:8px 0 0;color:#a9bdc8;font-size:12.5px;line-height:1.45}
+      .duplicate-worker-data{
+        margin:14px 0;padding:11px 12px;border-radius:15px;text-align:left;
+        border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035)
+      }
+      .duplicate-worker-data small{display:block;color:#748d9c;font-size:8.5px;font-weight:900;letter-spacing:1.2px}
+      .duplicate-worker-data b{display:block;margin-top:4px;color:#f1f8fb;font-size:13.5px;line-height:1.35;word-break:break-word}
+      .duplicate-worker-ok{
+        width:100%;min-height:44px;border:0;border-radius:14px;
+        background:linear-gradient(135deg,var(--mint),var(--mint2));color:#05251a;
+        font-weight:950;font-size:13.5px
+      }
+      @keyframes duplicateWorkerFade{from{opacity:0}to{opacity:1}}
+      @keyframes duplicateWorkerCard{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+      @media(max-width:560px){
+        .duplicate-worker-dialog{align-items:center;justify-content:center;padding:16px}
+        .duplicate-worker-card{width:min(320px,90vw);border-radius:22px;padding:18px 16px 15px}
+      }
+    `;
+    document.head.appendChild(style);
+
+    dialog=document.createElement("div");
+    dialog.id="duplicateWorkerDialog";
+    dialog.className="duplicate-worker-dialog";
+    dialog.setAttribute("role","dialog");
+    dialog.setAttribute("aria-modal","true");
+    dialog.setAttribute("aria-labelledby","duplicateWorkerTitle");
+    dialog.innerHTML=`
+      <div class="duplicate-worker-card">
+        <div class="duplicate-worker-icon">!</div>
+        <h3 id="duplicateWorkerTitle">Trabajador ya registrado</h3>
+        <p>No se creó otra cuenta porque este DNI ya pertenece a un trabajador.</p>
+        <div class="duplicate-worker-data">
+          <small>REGISTRO ENCONTRADO</small>
+          <b id="duplicateWorkerInfo">DNI registrado</b>
+        </div>
+        <button class="duplicate-worker-ok" id="duplicateWorkerOk" type="button">Entendido</button>
+      </div>
+    `;
+    document.body.appendChild(dialog);
+
+    const close=()=>{
+      dialog.classList.remove("open");
+      dialog.setAttribute("aria-hidden","true");
+      unlockDuplicateWorkerBackground();
+      resetWorkerRegisterForm();
+      const input=document.getElementById("workerFullName")||document.getElementById("workerDni");
+      setTimeout(()=>{input?.focus?.();},60);
+    };
+    dialog.querySelector("#duplicateWorkerOk")?.addEventListener("click",close);
+    dialog.addEventListener("click",event=>{if(event.target===dialog)close()});
+    document.addEventListener("keydown",event=>{if(event.key==="Escape"&&dialog.classList.contains("open"))close()});
+    return dialog;
+  }
+
+  function showDuplicateWorker(worker,dni){
+    const dialog=ensureDuplicateWorkerDialog();
+    const info=dialog.querySelector("#duplicateWorkerInfo");
+    const name=String(worker?.fullName||worker?.nombre||"Trabajador registrado").trim();
+    const code=String(worker?.dni||dni||"").trim();
+    if(info)info.textContent=code?`${name} · DNI ${code}`:name;
+    lockDuplicateWorkerBackground();
+    dialog.classList.add("open");
+    dialog.setAttribute("aria-hidden","false");
+    setTimeout(()=>dialog.querySelector("#duplicateWorkerOk")?.focus(),50);
+  }
 
   async function createPortalAccount(worker,pin){
     const session=window.ToolControlAuthSession;
@@ -15067,8 +15699,11 @@ body.worker-qr-modal-open{overflow:hidden!important;overscroll-behavior:none!imp
       credential=await session.authModule.createUserWithEmailAndPassword(secondaryAuth,email,pin);
     }catch(error){
       if(String(error?.code||"")==="auth/email-already-in-use"){
-        credential=await session.authModule.signInWithEmailAndPassword(secondaryAuth,email,pin);
-      }else throw error;
+        const duplicateError=new Error("Trabajador ya se encuentra registrado");
+        duplicateError.code="worker/dni-already-registered";
+        throw duplicateError;
+      }
+      throw error;
     }
 
     const uid=credential.user.uid;
@@ -15106,7 +15741,20 @@ body.worker-qr-modal-open{overflow:hidden!important;overscroll-behavior:none!imp
     if(creatingAccess)return;
 
     const editId=Number(document.getElementById("editWorkerId")?.value||0);
-    const existing=(window.workers||workers||[]).find(row=>Number(row.id)===editId)||null;
+    const workerRows=window.workers||workers||[];
+    const existing=workerRows.find(row=>Number(row.id)===editId)||null;
+    const enteredDni=String(document.getElementById("workerDni")?.value||"").trim();
+    const duplicateWorker=workerRows.find(row=>
+      Number(row.id)!==editId &&
+      normalizeDni(row.dni) &&
+      normalizeDni(row.dni)===normalizeDni(enteredDni)
+    )||null;
+
+    if(duplicateWorker){
+      showDuplicateWorker(duplicateWorker,enteredDni);
+      return;
+    }
+
     const needsAccess=!existing?.authUid;
     const pin=String(document.getElementById("workerPortalPin")?.value||"").trim();
     const confirmPin=String(document.getElementById("workerPortalPinConfirm")?.value||"").trim();
@@ -15141,7 +15789,7 @@ body.worker-qr-modal-open{overflow:hidden!important;overscroll-behavior:none!imp
       console.error("Creación automática de acceso:",error);
       const code=String(error?.code||"");
       if(code==="auth/weak-password")toast("El PIN debe tener 6 dígitos");
-      else if(code==="auth/email-already-in-use")toast("Ese DNI ya tiene una cuenta de acceso");
+      else if(code==="worker/dni-already-registered"||code==="auth/email-already-in-use")showDuplicateWorker(null,enteredDni);
       else if(code.includes("permission-denied"))toast("Firebase no permitió crear el perfil del trabajador");
       else toast(error?.message||"No se pudo crear el acceso del trabajador");
     }finally{
